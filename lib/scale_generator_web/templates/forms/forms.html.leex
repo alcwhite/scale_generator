@@ -1,0 +1,43 @@
+<div class="phx-hero">
+    <p class="lead">ascending</p>
+    <h2>
+        <%= Enum.map(Enum.with_index(scale(@tonic, @scale, :asc)), fn {note, i} -> %>
+            <span id="<%= i %>-asc" class="note"><%= note %></span>
+        <% end) %>
+    </h2>
+    <p class="lead">descending</p>
+    <h2>
+        <%= Enum.map(Enum.with_index(scale(@tonic, @scale, :desc)), fn {note, i} -> %>
+            <span id="<%= i %>-desc" class="note"><%= note %></span>
+        <% end) %>
+    </h2>
+    <p class="lead"><%= scale_name(@tonic, @scale) %></p>
+    <button data-action="<%= @play_text %>" id="scale_player" phx-hook="PlayScale" data-recording="<%= @recording %>">
+        <%= @play_text %>
+    </button>
+</div>
+
+<form phx-change="change" class="row">
+    <section class="column">
+        <%= label :scale_form, :tonic, "Tonic: " %>
+        <%= select :scale_form, :tonic, @all_tonics, value: @tonic %>
+    </section>
+    <section class="column">
+        <%= label :scale_form, :name, "Scale name: " %>
+        <%= select :scale_form, :name, @all_scales, value: @scale %>
+    </section>
+</form>
+
+<article class="row">
+    <section class="column">
+        <p>Scale patterns must contain exactly 12 half-steps.</p> 
+        <p>m = 1, M = 2, A = 3 half-steps</>
+    </section>
+</article>
+
+<article class="row">
+    <%= live_render @socket, ScaleGeneratorWeb.CreateScaleForm, [session: %{"all_scales" => @all_scales}, id: "create"] %>
+    <%= live_render @socket, ScaleGeneratorWeb.UpdateScaleForm, [session: %{"all_scales" => @all_scales}, id: "update"] %>
+    <%= live_render @socket, ScaleGeneratorWeb.DeleteScaleForm, [session: %{"all_scales" => @all_scales}, id: "destroy"] %>
+</article>
+

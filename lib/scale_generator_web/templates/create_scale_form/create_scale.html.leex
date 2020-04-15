@@ -1,0 +1,25 @@
+<section class="column">
+    <h3>Add a scale type</h3>
+    <form phx-submit="create_scale" phx-change="change_create">
+        <%= label :create_scale_form, :name, "Scale name: " %>
+        <%= text_input :create_scale_form, :name, [placeholder: "Enter name of scale type", value: @name] %>
+
+        <%= label :create_scale_form, :pattern, "Scale pattern: " %>
+        <%= text_input :create_scale_form, :pattern, [placeholder: "Using m, M, A", value: @asc_pattern] %>
+
+        <label>Descending pattern is different
+            <%= checkbox :checkbox, :different, [phx_click: "toggle_show", value: @show] %>
+        </label>
+
+        <%= if @show do %>
+            <%= label :create_scale_form, :desc_pattern, "Descending pattern: " %>
+            <%= text_input :create_scale_form, :desc_pattern, placeholder: "Using m, M, A" %>
+        <% end %>
+            
+        <%= if !@show do %>
+            <%= hidden_input :create_scale_form, :desc_pattern %>
+        <% end %>
+
+        <%= submit "Add", phx_disable_with: "Adding..." %>
+    </form>
+</section>

@@ -1,0 +1,25 @@
+<section class="column">
+    <h3>Correct a scale type</h3>
+    <form phx-submit="update_scale" phx-change="change_update">
+        <%= label :update_scale_form, :name, "Scale name: " %>
+        <%= select :update_scale_form, :name, @all_scales, value: @name %>
+
+        <%= label :update_scale_form, :pattern, "Scale pattern: " %>
+        <%= text_input :update_scale_form, :pattern, [placeholder: "Using m, M, A", value: @asc_pattern] %>
+
+        <label>Descending pattern is different
+            <%= checkbox :checkbox_update, :different, [phx_click: "toggle_show", value: @show] %>
+        </label>
+
+        <%= if @show do %>
+            <%= label :update_scale_form, :desc_pattern, "Descending pattern: " %>
+            <%= text_input :update_scale_form, :desc_pattern, placeholder: "Using m, M, A" %>
+        <% end %>
+            
+        <%= if !@show do %>
+            <%= hidden_input :update_scale_form, :desc_pattern %>
+        <% end %>
+
+        <%= submit "Update", phx_disable_with: "Updating..." %>
+    </form>
+</section>
