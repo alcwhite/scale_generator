@@ -14,7 +14,6 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
   def handle_event("delete_scale", %{"delete_scale_form" => %{"name" => name}}, socket) do
     scale_id = Enum.find(Scales.list_scales(), fn s -> s.name == name end).id
     return_value = Scales.delete_scale(Scales.get_scale!(scale_id))
-    send(socket.parent_pid, {"update_scales", name})
 
     get_return_value(elem(return_value, 0), socket)
   end
@@ -24,6 +23,7 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
                 |> assign(:ok, "")}
   end
   defp get_return_value(message, socket) when message == :ok do
+    send(socket.parent_pid, {"update_scales", []})
     {:noreply, assign(socket, :ok, "Deleted")
                 |> assign(:error, "")}
   end

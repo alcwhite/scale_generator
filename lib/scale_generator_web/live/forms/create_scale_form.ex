@@ -20,7 +20,6 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
       _ -> desc_pattern
     end
     new_scale = Scales.create_scale(%{name: String.downcase(name), asc_pattern: pattern, desc_pattern: desc_pattern})
-    send(socket.parent_pid, {"update_scales", [name, pattern, desc_pattern]})
     get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket)
   end
 
@@ -42,9 +41,11 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
     {:noreply, assign(socket, :errors, Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end)))}
   end
   defp get_return_value(message, _changeset, socket) when message == :ok do
+    send(socket.parent_pid, {"update_scales", []})
     {:noreply, assign(socket, :show, false)
                 |> assign(:name, "")
                 |> assign(:asc_pattern, "")
+                |> assign(:errors, [])
                 |> assign(:ok, "Saved")}
   end
 

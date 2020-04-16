@@ -21,7 +21,6 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
     end
     scale_id = Enum.find(Scales.list_scales(), fn s -> s.name == name end).id
     new_scale = Scales.update_scale(Scales.get_scale!(scale_id), %{asc_pattern: pattern, desc_pattern: desc_pattern})
-    send(socket.parent_pid, {})
     get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket)
   end
 
@@ -43,6 +42,7 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
                 |> assign(:ok, "")}
   end
   defp get_return_value(message, _changeset, socket) when message == :ok do
+    send(socket.parent_pid, {})
     {:noreply, assign(socket, :show, false)
                 |> assign(:name, "chromatic")
                 |> assign(:asc_pattern, "")
