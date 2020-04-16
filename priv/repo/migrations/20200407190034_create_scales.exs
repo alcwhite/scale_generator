@@ -10,5 +10,7 @@ defmodule ScaleGenerator.Repo.Migrations.CreateScales do
       timestamps()
     end
 
+    create unique_index(:scales, :name)
+
   end
 end

@@ -1,5 +1,7 @@
 <section class="column">
     <h3>Remove a scale type</h3>
+    <p class="error"><%= @error %></p>
+    <p class="ok"><%= @ok %></p>
     <form phx-submit="delete_scale">
         <%= label :delete_scale_form, :name, "Scale name: " %>
         <%= select :delete_scale_form, :name, @all_scales %>

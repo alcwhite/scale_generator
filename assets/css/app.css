@@ -15,3 +15,11 @@
 .note {
     margin: 3px;
 }
+
+.error {
+    color: orangered
+}
+
+.ok {
+    color: green
+}

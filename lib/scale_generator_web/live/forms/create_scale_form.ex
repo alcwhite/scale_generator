@@ -8,7 +8,9 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
     {:ok, assign(socket, :all_scales, session["all_scales"])
           |> assign(:show, false)
           |> assign(:name, "")
-          |> assign(:asc_pattern, "")}
+          |> assign(:asc_pattern, "")
+          |> assign(:errors, [])
+          |> assign(:ok, "")}
   end
 
 
@@ -17,11 +19,9 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
       "" -> String.reverse(pattern)
       _ -> desc_pattern
     end
-    Scales.create_scale(%{name: String.downcase(name), asc_pattern: pattern, desc_pattern: desc_pattern})
+    new_scale = Scales.create_scale(%{name: String.downcase(name), asc_pattern: pattern, desc_pattern: desc_pattern})
     send(socket.parent_pid, {"update_scales", [name, pattern, desc_pattern]})
-    {:noreply, assign(socket, :show, false)
-                |> assign(:name, "")
-                |> assign(:asc_pattern, "")}
+    get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket)
   end
 
   def handle_event("toggle_show", _event, socket) do
@@ -35,6 +35,17 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
   def handle_event("change_create", %{"create_scale_form" => %{"name" => name, "pattern" => pattern, "desc_pattern" => _desc_pattern}}, socket) do
     {:noreply, assign(socket, :name, name)
                 |> assign(:asc_pattern, pattern)}
+  end
+
+
+  defp get_return_value(message, changeset, socket) when message == :error do
+    {:noreply, assign(socket, :errors, Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end)))}
+  end
+  defp get_return_value(message, _changeset, socket) when message == :ok do
+    {:noreply, assign(socket, :show, false)
+                |> assign(:name, "")
+                |> assign(:asc_pattern, "")
+                |> assign(:ok, "Saved")}
   end
 
   def render(assigns) do

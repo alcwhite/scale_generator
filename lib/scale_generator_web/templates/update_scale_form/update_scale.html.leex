@@ -1,5 +1,9 @@
 <section class="column">
     <h3>Correct a scale type</h3>
+    <%= for error <- @errors do %>
+        <p class="error"><%= error %></p>
+    <% end %>
+    <p class="ok"><%= @ok %></p>
     <form phx-submit="update_scale" phx-change="change_update">
         <%= label :update_scale_form, :name, "Scale name: " %>
         <%= select :update_scale_form, :name, @all_scales, value: @name %>
@@ -15,7 +19,7 @@
             <%= label :update_scale_form, :desc_pattern, "Descending pattern: " %>
             <%= text_input :update_scale_form, :desc_pattern, placeholder: "Using m, M, A" %>
         <% end %>
-            
+
         <%= if !@show do %>
             <%= hidden_input :update_scale_form, :desc_pattern %>
         <% end %>

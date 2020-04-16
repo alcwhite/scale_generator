@@ -22,7 +22,7 @@ defmodule ScaleGenerator.Scales.Scale do
       end)
       case pattern_count == 12 do
         true -> []
-        false -> [{field, options[:message] || "Must contain exactly 12 half-steps (m=1, M=2, A=3)"}]
+        false -> [{field, options[:message] || "Pattern must contain exactly 12 half-steps (m=1, M=2, A=3)"}]
       end
     end)
   end
@@ -31,11 +31,11 @@ defmodule ScaleGenerator.Scales.Scale do
   def changeset(scale, attrs) do
     scale
     |> cast(attrs, [:name, :asc_pattern, :desc_pattern])
-    |> validate_required([:name, :asc_pattern, :desc_pattern])
-    |> validate_format(:asc_pattern, ~r/^[MmA]*$/, message: "Must only use M, m, and A")
-    |> validate_format(:desc_pattern, ~r/^[MmA]*$/, message: "Must only use M, m, and A")
-    |> validate_step_range(:asc_pattern, message: "Must contain exactly twelve steps (m=1, M=2, A=3)")
-    |> validate_step_range(:desc_pattern, message: "Must contain exactly twelve steps (m=1, M=2, A=3)")
-    |> unique_constraint(:name)
+    |> validate_required([:name, :asc_pattern, :desc_pattern], message: "All fields required")
+    |> unique_constraint(:name, [name: :scales_name_index, message: "Name has already been used"])
+    |> validate_format(:asc_pattern, ~r/^[MmA]*$/, message: "Pattern must only use M, m, and A")
+    |> validate_format(:desc_pattern, ~r/^[MmA]*$/, message: "Pattern must only use M, m, and A")
+    |> validate_step_range(:asc_pattern)
+    |> validate_step_range(:desc_pattern)
   end
 end

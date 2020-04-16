@@ -8,7 +8,9 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
     {:ok, assign(socket, :all_scales, session["all_scales"])
           |> assign(:show, false)
           |> assign(:name, "chromatic")
-          |> assign(:asc_pattern, "")}
+          |> assign(:asc_pattern, "")
+          |> assign(:errors, [])
+          |> assign(:ok, "")}
   end
 
 
@@ -18,10 +20,9 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
       _ -> desc_pattern
     end
     scale_id = Enum.find(Scales.list_scales(), fn s -> s.name == name end).id
-    Scales.update_scale(Scales.get_scale!(scale_id), %{asc_pattern: pattern, desc_pattern: desc_pattern})
-    {:noreply, assign(socket, :show, false)
-                |> assign(:name, "chromatic")
-                |> assign(:asc_pattern, "")}
+    new_scale = Scales.update_scale(Scales.get_scale!(scale_id), %{asc_pattern: pattern, desc_pattern: desc_pattern})
+    send(socket.parent_pid, {})
+    get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket)
   end
 
   def handle_event("toggle_show", _event, socket) do
@@ -35,6 +36,18 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
   def handle_event("change_update", %{"update_scale_form" => %{"name" => name, "pattern" => pattern, "desc_pattern" => _desc_pattern}}, socket) do
     {:noreply, assign(socket, :name, name)
                 |> assign(:asc_pattern, pattern)}
+  end
+
+  defp get_return_value(message, changeset, socket) when message == :error do
+    {:noreply, assign(socket, :errors, Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end)))
+                |> assign(:ok, "")}
+  end
+  defp get_return_value(message, _changeset, socket) when message == :ok do
+    {:noreply, assign(socket, :show, false)
+                |> assign(:name, "chromatic")
+                |> assign(:asc_pattern, "")
+                |> assign(:ok, "Saved")
+                |> assign(:errors, [])}
   end
 
   def render(assigns) do

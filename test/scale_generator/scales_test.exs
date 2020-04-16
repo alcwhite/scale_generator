@@ -98,31 +98,31 @@ defmodule ScaleGenerator.ScalesTest do
     test "check validations bad pattern too long" do
       changeset = Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMmm", desc_pattern: "MMmMMMm"})
       refute changeset.valid?
-      assert %{asc_pattern: ["Must contain exactly twelve steps (m=1, M=2, A=3)"]} = errors_on(changeset)
+      assert %{asc_pattern: ["Pattern must contain exactly 12 half-steps (m=1, M=2, A=3)"]} = errors_on(changeset)
     end
 
     test "check validations bad pattern too short" do
       changeset = Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "MMmMMM"})
       refute changeset.valid?
-      assert %{desc_pattern: ["Must contain exactly twelve steps (m=1, M=2, A=3)"]} = errors_on(changeset)
+      assert %{desc_pattern: ["Pattern must contain exactly 12 half-steps (m=1, M=2, A=3)"]} = errors_on(changeset)
     end
 
     test "check validations bad pattern wrong steps" do
       changeset = Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMmn", desc_pattern: "MMmMMMm"})
       refute changeset.valid?
-      assert %{asc_pattern: ["Must only use M, m, and A"]} = errors_on(changeset)
+      assert %{asc_pattern: ["Pattern must only use M, m, and A"]} = errors_on(changeset)
     end
 
     test "check validations missing pattern" do
       changeset = Scale.changeset(%Scale{}, %{name: "major", desc_pattern: "mMMMmMM"})
       refute changeset.valid?
-      assert %{asc_pattern: ["can't be blank"]} = errors_on(changeset)
+      assert %{asc_pattern: ["All fields required"]} = errors_on(changeset)
     end
 
     test "check validations missing name" do
       changeset = Scale.changeset(%Scale{}, %{asc_pattern: "MMmMMMm", desc_pattern: "mMMMmMM"})
       refute changeset.valid?
-      assert %{name: ["can't be blank"]} = errors_on(changeset)
+      assert %{name: ["All fields required"]} = errors_on(changeset)
     end
   end
 end

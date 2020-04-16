@@ -20,8 +20,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
   end
 
   test "main form events", %{conn: conn} do
-    conn = get(conn, "/")
-    {:ok, view, _html} = live(conn)
+    {:ok, view, _html} = live(conn, "/")
     Scales.create_scale(%{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "mMMMmMM"})
     Enum.each(create_spans("D D# E F F# G G# A A# B C C# D", "asc"), fn span -> assert render_change(view, :change, %{"scale_form" => %{"tonic" => "D", "name" => "chromatic"}}) =~ span end)
     assert render_change(view, :change, %{"scale_form" => %{"tonic" => "D#", "name" => "major"}}) =~ "D# major"
@@ -29,8 +28,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
   end
 
   test "add scales", %{conn: conn} do
-    conn = get(conn, "/")
-    {:ok, view, _html} = live(conn)
+    {:ok, view, _html} = live(conn, "/")
     all_scales_count = Enum.count(Scales.list_scales())
     assert all_scales_count = 0
     render_submit(view, :create_scale, %{"scale_form" => %{"name" => "major", "pattern" => "MMmMMMm", "desc_pattern" => "mMMMmMM"}})
@@ -39,8 +37,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
   end
 
   test "edit scales", %{conn: conn} do
-    conn = get(conn, "/")
-    {:ok, view, _html} = live(conn)
+    {:ok, view, _html} = live(conn, "/")
     all_scales_count = Enum.count(Scales.list_scales())
     assert all_scales_count = 0
     Scales.create_scale(%{name: "major", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
@@ -58,8 +55,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
   end
 
   test "delete scales", %{conn: conn} do
-    conn = get(conn, "/")
-    {:ok, view, _html} = live(conn)
+    {:ok, view, _html} = live(conn, "/")
     all_scales_count = Enum.count(Scales.list_scales())
     assert all_scales_count = 0
     Scales.create_scale(%{name: "major", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})

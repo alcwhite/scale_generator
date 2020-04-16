@@ -1,5 +1,9 @@
 <section class="column">
     <h3>Add a scale type</h3>
+    <%= for error <- @errors do %>
+        <p class="error"><%= error %></p>
+    <% end %>
+    <p class="ok"><%= @ok %></p>
     <form phx-submit="create_scale" phx-change="change_create">
         <%= label :create_scale_form, :name, "Scale name: " %>
         <%= text_input :create_scale_form, :name, [placeholder: "Enter name of scale type", value: @name] %>
@@ -15,7 +19,7 @@
             <%= label :create_scale_form, :desc_pattern, "Descending pattern: " %>
             <%= text_input :create_scale_form, :desc_pattern, placeholder: "Using m, M, A" %>
         <% end %>
-            
+
         <%= if !@show do %>
             <%= hidden_input :create_scale_form, :desc_pattern %>
         <% end %>
