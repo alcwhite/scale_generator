@@ -57,7 +57,7 @@ defmodule ScaleGeneratorWeb.FormsLive do
      |> assign(:recording, Enum.join(recording, " "))}
   end
 
-  def handle_event("update_scales", _event, socket) do
+  def handle_info("update_scales", socket) do
     {:noreply, assign(socket, :all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))}
   end
 

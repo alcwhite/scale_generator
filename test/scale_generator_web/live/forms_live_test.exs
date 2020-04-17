@@ -43,52 +43,42 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
 
   test "add scales", %{conn: conn} do
     {:ok, view, _html} = live(conn, "/")
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 0
+    assert 0 == Enum.count(Scales.list_scales())
 
-    render_submit(view, :create_scale, %{
-      "scale_form" => %{"name" => "major", "pattern" => "MMmMMMm", "desc_pattern" => "mMMMmMM"}
-    })
+    find_live_child(view, "create")
+      |> form("form", create_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""})
+      |> render_submit()
 
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 1
+    assert 1 == Enum.count(Scales.list_scales())
   end
 
   test "edit scales", %{conn: conn} do
+    assert 0 == Enum.count(Scales.list_scales())
+    Scales.create_scale(%{name: "whatever", asc_pattern: "MMMMMmm", desc_pattern: "mmmMMmMM"})
+    assert 1 == Enum.count(Scales.list_scales())
+    assert "MMMMMmm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
+
     {:ok, view, _html} = live(conn, "/")
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 0
-    Scales.create_scale(%{name: "major", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 1
-    scale = Enum.at(Scales.list_scales(), 0)
-    scale_pattern = Scales.get_scale!(scale.id).asc_pattern
-    assert scale_pattern = "MMmMMmmm"
 
-    render_submit(view, :update_scale, %{
-      "update_scale_form" => %{
-        "name" => "major",
-        "pattern" => "MMmMMMm",
-        "desc_pattern" => "mMMMmMM"
-      }
-    })
+    find_live_child(view, "update")
+      |> form("form", update_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""})
+      |> render_submit()
 
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 1
-    new_scale_pattern = Scales.get_scale!(scale.id).asc_pattern
-    assert new_scale_pattern = "MMmMMMm"
+    assert 1 == Enum.count(Scales.list_scales())
+    assert "MMmMMMm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
   end
 
   test "delete scales", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 0
-    Scales.create_scale(%{name: "major", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 1
+    assert 0 == Enum.count(Scales.list_scales())
+    Scales.create_scale(%{name: "whatever", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
+    assert 1 == Enum.count(Scales.list_scales())
 
-    render_submit(view, :delete_scale, %{"delete_scale_form" => %{"name" => "major"}})
-    all_scales_count = Enum.count(Scales.list_scales())
-    assert all_scales_count = 0
+    {:ok, view, _html} = live(conn, "/")
+
+
+    find_live_child(view, "destroy")
+      |> form("form", delete_scale_form: %{"name" => "whatever"})
+      |> render_submit()
+    assert 0 == Enum.count(Scales.list_scales())
   end
 end

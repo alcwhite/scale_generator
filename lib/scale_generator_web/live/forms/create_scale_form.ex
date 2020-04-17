@@ -77,7 +77,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
   end
 
   defp get_return_value(message, _changeset, socket) when message == :ok do
-    send(socket.parent_pid, {"update_scales", []})
+    send(socket.parent_pid, "update_scales")
 
     {:noreply,
      assign(socket, :show, false)
