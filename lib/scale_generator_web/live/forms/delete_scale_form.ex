@@ -25,11 +25,11 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
   end
 
   defp get_return_value(message, socket) when message == :ok do
-    send(socket.parent_pid, "update_scales")
-
     {:noreply,
      assign(socket, :ok, "Deleted")
      |> assign(:error, "")}
+
+    send(socket.parent_pid, "update_scales")
   end
 
   def render(assigns) do

@@ -77,14 +77,14 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
   end
 
   defp get_return_value(message, _changeset, socket) when message == :ok do
-    send(socket.parent_pid, "update_scales")
-
     {:noreply,
      assign(socket, :show, false)
      |> assign(:name, "")
      |> assign(:asc_pattern, "")
      |> assign(:errors, [])
      |> assign(:ok, "Saved")}
+
+    send(socket.parent_pid, "update_scales")
   end
 
   def render(assigns) do

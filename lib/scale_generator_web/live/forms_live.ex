@@ -57,16 +57,16 @@ defmodule ScaleGeneratorWeb.FormsLive do
      |> assign(:recording, Enum.join(recording, " "))}
   end
 
-  def handle_info("update_scales", socket) do
-    {:noreply, assign(socket, :all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))}
-  end
-
   def handle_event("stop", _event, socket) do
     {:noreply, assign(socket, :play_text, "Play")}
   end
 
   def handle_event("play", _event, socket) do
     {:noreply, assign(socket, :play_text, "Stop")}
+  end
+
+  def handle_info("update_scales", socket) do
+    {:noreply, assign(socket, :all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))}
   end
 
   def render(assigns) do
