@@ -225,7 +225,8 @@ defmodule ScaleGeneratorLogicTest do
 
     @tag :pending
     test "E flat Mixolydian scale" do
-      assert ScaleGeneratorLogic.scale("Eb", @mixolydian_scale_pattern) == ~w(Eb F G Ab Bb C Db Eb)
+      assert ScaleGeneratorLogic.scale("Eb", @mixolydian_scale_pattern) ==
+               ~w(Eb F G Ab Bb C Db Eb)
     end
 
     @tag :pending
@@ -245,7 +246,8 @@ defmodule ScaleGeneratorLogicTest do
 
     @tag :pending
     test "d Harmonic minor scale" do
-      assert ScaleGeneratorLogic.scale("d", @harmonic_minor_scale_pattern) == ~w(D E F G A Bb Db D)
+      assert ScaleGeneratorLogic.scale("d", @harmonic_minor_scale_pattern) ==
+               ~w(D E F G A Bb Db D)
     end
 
     @tag :pending
@@ -273,12 +275,16 @@ defmodule ScaleGeneratorLogicTest do
       assert ScaleGeneratorLogic.scale("G", @enigmatic_scale_pattern) == ~w(G G# B C# D# F F# G)
     end
   end
+
   describe "generate descending scale" do
     test "C major scale" do
-      assert ScaleGeneratorLogic.scale("C", String.reverse(@major_scale_pattern), :desc) == ~w(C B A G F E D C)
+      assert ScaleGeneratorLogic.scale("C", String.reverse(@major_scale_pattern), :desc) ==
+               ~w(C B A G F E D C)
     end
+
     test "G Enigmatic scale" do
-      assert ScaleGeneratorLogic.scale("G", String.reverse(@enigmatic_scale_pattern), :desc) == Enum.reverse(~w(G G# B C# D# F F# G))
+      assert ScaleGeneratorLogic.scale("G", String.reverse(@enigmatic_scale_pattern), :desc) ==
+               Enum.reverse(~w(G G# B C# D# F F# G))
     end
   end
 end

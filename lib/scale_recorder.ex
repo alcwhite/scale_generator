@@ -7,23 +7,54 @@ defmodule ScaleGeneratorWeb.ScaleRecorder do
   def find_frequency(note, tonic_frequency, _frequencies, _all_frequencies) when note == "T" do
     tonic_frequency
   end
+
   def find_frequency(note, _tonic_frequency, frequencies, all_frequencies) do
-    Enum.at(all_frequencies, Enum.find_index(all_frequencies, fn x -> x == List.last(frequencies) end) + @steps[note])
+    Enum.at(
+      all_frequencies,
+      Enum.find_index(all_frequencies, fn x -> x == List.last(frequencies) end) + @steps[note]
+    )
   end
 
   defp top_tonic_freq(tonic_frequency) do
-    Enum.at(@all_frequencies, Enum.find_index(@all_frequencies, fn x -> x == tonic_frequency end) + 12)
+    Enum.at(
+      @all_frequencies,
+      Enum.find_index(@all_frequencies, fn x -> x == tonic_frequency end) + 12
+    )
   end
 
   def record_scale(name, tonic_frequency, direction \\ :asc)
+
   def record_scale(name, tonic_frequency, direction) when direction == :asc do
-    pattern = ScaleGeneratorWeb.FormsView.get_pattern(Enum.find(Scales.list_scales(), fn s -> s.name == name end), direction)
-    ["T"] ++ String.graphemes(pattern)
-    |> Enum.reduce([], fn note, acc -> acc ++ [find_frequency(note, tonic_frequency, acc, @all_frequencies)] end)
+    pattern =
+      ScaleGeneratorWeb.FormsView.get_pattern(
+        Enum.find(Scales.list_scales(), fn s -> s.name == name end),
+        direction
+      )
+
+    (["T"] ++ String.graphemes(pattern))
+    |> Enum.reduce([], fn note, acc ->
+      acc ++ [find_frequency(note, tonic_frequency, acc, @all_frequencies)]
+    end)
   end
+
   def record_scale(name, tonic_frequency, direction) when direction == :desc do
-    pattern = ScaleGeneratorWeb.FormsView.get_pattern(Enum.find(Scales.list_scales(), fn s -> s.name == name end), direction)
-    ["T"] ++ String.graphemes(pattern)
-    |> Enum.reduce([], fn note, acc -> acc ++ [find_frequency(note, top_tonic_freq(tonic_frequency), acc, Enum.reverse(@all_frequencies))] end)
+    pattern =
+      ScaleGeneratorWeb.FormsView.get_pattern(
+        Enum.find(Scales.list_scales(), fn s -> s.name == name end),
+        direction
+      )
+
+    (["T"] ++ String.graphemes(pattern))
+    |> Enum.reduce([], fn note, acc ->
+      acc ++
+        [
+          find_frequency(
+            note,
+            top_tonic_freq(tonic_frequency),
+            acc,
+            Enum.reverse(@all_frequencies)
+          )
+        ]
+    end)
   end
 end

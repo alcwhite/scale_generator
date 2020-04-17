@@ -30,5 +30,3 @@ Repo.insert!(%Scale{name: "enigmatic", asc_pattern: "mAMMMmm", desc_pattern: "mm
 Repo.insert!(%Scale{name: "minor pentatonic", asc_pattern: "AMMAM", desc_pattern: "MAMMA"})
 Repo.insert!(%Scale{name: "blues", asc_pattern: "MMMmMA", desc_pattern: "MMMmMA"})
 Repo.insert!(%Scale{name: "minor blues", asc_pattern: "AMmmAM", desc_pattern: "MAmmMA"})
-
-

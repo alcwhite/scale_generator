@@ -10,8 +10,7 @@ defmodule ScaleGeneratorWeb.Endpoint do
     signing_salt: "i96OewQWQSR/QDpKwME7nEhaih4mGiL2"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket,
-    websocket: [connect_info: [session: @session_options]]
+  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   socket "/socket", ScaleGeneratorWeb.UserSocket,
     websocket: true,

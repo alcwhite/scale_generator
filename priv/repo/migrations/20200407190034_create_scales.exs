@@ -11,6 +11,5 @@ defmodule ScaleGenerator.Repo.Migrations.CreateScales do
     end
 
     create unique_index(:scales, :name)
-
   end
 end

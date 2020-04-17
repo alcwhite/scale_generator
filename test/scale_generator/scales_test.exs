@@ -34,7 +34,6 @@ defmodule ScaleGenerator.ScalesTest do
       assert scale.name == "major"
       assert scale.asc_pattern == "MMmMMMm"
       assert scale.desc_pattern == "mMMMmMM"
-
     end
 
     test "create_scale/1 with invalid data returns error changeset" do
@@ -57,7 +56,10 @@ defmodule ScaleGenerator.ScalesTest do
 
     test "update_scale/2 with invalid data returns error changeset: too many steps" do
       scale = scale_fixture()
-      assert {:error, %Ecto.Changeset{}} = Scales.update_scale(scale, %{asc_pattern: "mmmmmmmmmmmmm"})
+
+      assert {:error, %Ecto.Changeset{}} =
+               Scales.update_scale(scale, %{asc_pattern: "mmmmmmmmmmmmm"})
+
       assert scale == Scales.get_scale!(scale.id)
     end
 
@@ -91,24 +93,48 @@ defmodule ScaleGenerator.ScalesTest do
     end
 
     test "check validations valid" do
-      changeset = Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "mMMMmMM"})
+      changeset =
+        Scale.changeset(%Scale{}, %{
+          name: "major",
+          asc_pattern: "MMmMMMm",
+          desc_pattern: "mMMMmMM"
+        })
+
       assert changeset.valid?
     end
 
     test "check validations bad pattern too long" do
-      changeset = Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMmm", desc_pattern: "MMmMMMm"})
+      changeset =
+        Scale.changeset(%Scale{}, %{
+          name: "major",
+          asc_pattern: "MMmMMMmm",
+          desc_pattern: "MMmMMMm"
+        })
+
       refute changeset.valid?
-      assert %{asc_pattern: ["Pattern must contain exactly 12 half-steps (m=1, M=2, A=3)"]} = errors_on(changeset)
+
+      assert %{asc_pattern: ["Pattern must contain exactly 12 half-steps (m=1, M=2, A=3)"]} =
+               errors_on(changeset)
     end
 
     test "check validations bad pattern too short" do
-      changeset = Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "MMmMMM"})
+      changeset =
+        Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "MMmMMM"})
+
       refute changeset.valid?
-      assert %{desc_pattern: ["Pattern must contain exactly 12 half-steps (m=1, M=2, A=3)"]} = errors_on(changeset)
+
+      assert %{desc_pattern: ["Pattern must contain exactly 12 half-steps (m=1, M=2, A=3)"]} =
+               errors_on(changeset)
     end
 
     test "check validations bad pattern wrong steps" do
-      changeset = Scale.changeset(%Scale{}, %{name: "major", asc_pattern: "MMmMMMmn", desc_pattern: "MMmMMMm"})
+      changeset =
+        Scale.changeset(%Scale{}, %{
+          name: "major",
+          asc_pattern: "MMmMMMmn",
+          desc_pattern: "MMmMMMm"
+        })
+
       refute changeset.valid?
       assert %{asc_pattern: ["Pattern must only use M, m, and A"]} = errors_on(changeset)
     end
