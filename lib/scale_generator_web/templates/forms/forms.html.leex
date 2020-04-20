@@ -1,16 +1,6 @@
 <div class="phx-hero">
-    <p class="lead">ascending</p>
-    <h2>
-        <%= Enum.map(Enum.with_index(scale(@tonic, @scale, :asc)), fn {note, i} -> %>
-            <span id="<%= i %>-asc" class="note"><%= note %></span>
-        <% end) %>
-    </h2>
-    <p class="lead">descending</p>
-    <h2>
-        <%= Enum.map(Enum.with_index(scale(@tonic, @scale, :desc)), fn {note, i} -> %>
-            <span id="<%= i %>-desc" class="note"><%= note %></span>
-        <% end) %>
-    </h2>
+    <%= live_component @socket, ScaleGeneratorWeb.ScaleComponent, [direction: "ascending", tonic: @tonic, scale: @scale] %>
+    <%= live_component @socket, ScaleGeneratorWeb.ScaleComponent, [direction: "descending", tonic: @tonic, scale: @scale] %>
     <p class="lead"><%= scale_name(@tonic, @scale) %></p>
     <button data-action="<%= @play_text %>" id="scale_player" phx-hook="PlayScale" data-recording="<%= @recording %>">
         <%= @play_text %>
