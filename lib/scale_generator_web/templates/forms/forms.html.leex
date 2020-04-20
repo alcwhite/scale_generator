@@ -1,21 +1,17 @@
 <div class="phx-hero">
     <%= live_component @socket, ScaleGeneratorWeb.ScaleComponent, [direction: "ascending", tonic: @tonic, scale: @scale] %>
     <%= live_component @socket, ScaleGeneratorWeb.ScaleComponent, [direction: "descending", tonic: @tonic, scale: @scale] %>
+
     <p class="lead"><%= scale_name(@tonic, @scale) %></p>
+
     <button data-action="<%= @play_text %>" id="scale_player" phx-hook="PlayScale" data-recording="<%= @recording %>">
         <%= @play_text %>
     </button>
 </div>
 
 <form phx-change="change" class="row center-wrapper">
-    <section class="column">
-        <%= label :scale_form, :tonic, "Tonic: ", class: "center" %>
-        <%= select :scale_form, :tonic, @all_tonics, [value: @tonic, class: "center"] %>
-    </section>
-    <section class="column center">
-        <%= label :scale_form, :name, "Scale name: ", class: "center" %>
-        <%= select :scale_form, :name, @all_scales, [value: @scale, class: "center"] %>
-    </section>
+    <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :scale_form, field: :tonic, label: "Tonic: ", list: @all_tonics, value: @tonic] %>
+    <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :scale_form, field: :name, label: "Scale name: ", list: @all_scales, value: @scale] %>
 </form>
 
 <article class="row">

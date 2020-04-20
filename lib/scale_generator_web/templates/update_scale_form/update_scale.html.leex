@@ -2,24 +2,12 @@
     <h3>Correct a scale type</h3>
         <%= live_component @socket, ScaleGeneratorWeb.FlashComponent, flash: @flash %>
     <form phx-submit="update_scale" phx-change="change_update">
-        <%= label :update_scale_form, :name, "Scale name: " %>
-        <%= select :update_scale_form, :name, @all_scales, value: @name %>
+        <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :update_scale_form, field: :name, label: "Scale name: ", list: @all_scales, value: @name] %>
 
-        <%= label :update_scale_form, :pattern, "Scale pattern: " %>
-        <%= text_input :update_scale_form, :pattern, [placeholder: "Using m, M, A", value: @asc_pattern] %>
+        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :update_scale_form, field: :pattern, label: "Pattern: ", value: @asc_pattern, show: true, placeholder: "Using m, M, A"] %>
 
-        <label>Descending pattern is different
-            <%= checkbox :checkbox_update, :different, [phx_click: "toggle_show", value: @show] %>
-        </label>
-
-        <%= if @show do %>
-            <%= label :update_scale_form, :desc_pattern, "Descending pattern: " %>
-            <%= text_input :update_scale_form, :desc_pattern, placeholder: "Using m, M, A" %>
-        <% end %>
-
-        <%= if !@show do %>
-            <%= hidden_input :update_scale_form, :desc_pattern %>
-        <% end %>
+        <%= live_component @socket, ScaleGeneratorWeb.DescendingCheckboxComponent, show: @show %>
+        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :update_scale_form, field: :desc_pattern, label: "Descending pattern: ", value: "", show: @show, placeholder: "Using m, M, A"] %>
 
         <%= submit "Update", phx_disable_with: "Updating..." %>
     </form>

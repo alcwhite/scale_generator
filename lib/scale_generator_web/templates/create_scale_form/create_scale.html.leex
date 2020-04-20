@@ -2,24 +2,12 @@
     <h3>Add a scale type</h3>
     <%= live_component @socket, ScaleGeneratorWeb.FlashComponent, flash: @flash %>
     <form phx-submit="create_scale" phx-change="change_create">
-        <%= label :create_scale_form, :name, "Scale name: " %>
-        <%= text_input :create_scale_form, :name, [placeholder: "Enter name of scale type", value: @name] %>
+        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :name, label: "Scale name: ", value: @name, placeholder: "Enter name of scale type", show: true] %>
 
-        <%= label :create_scale_form, :pattern, "Scale pattern: " %>
-        <%= text_input :create_scale_form, :pattern, [placeholder: "Using m, M, A", value: @asc_pattern] %>
+        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :pattern, label: "Pattern: ", value: @asc_pattern, placeholder: "Using m, M, A", show: true] %>
 
-        <label>Descending pattern is different
-            <%= checkbox :checkbox, :different, [phx_click: "toggle_show", value: @show] %>
-        </label>
-
-        <%= if @show do %>
-            <%= label :create_scale_form, :desc_pattern, "Descending pattern: " %>
-            <%= text_input :create_scale_form, :desc_pattern, placeholder: "Using m, M, A" %>
-        <% end %>
-
-        <%= if !@show do %>
-            <%= hidden_input :create_scale_form, :desc_pattern %>
-        <% end %>
+        <%= live_component @socket, ScaleGeneratorWeb.DescendingCheckboxComponent, show: @show %>
+        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :desc_pattern, label: "Descending pattern: ", value: "", placeholder: "Using m, M, A", show: @show] %>
 
         <%= submit "Add", phx_disable_with: "Adding..." %>
     </form>
