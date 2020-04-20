@@ -14,12 +14,7 @@
     <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :scale_form, field: :name, label: "Scale name: ", list: @all_scales, value: @scale] %>
 </form>
 
-<article class="row">
-    <section class="column">
-        <p>Scale patterns must contain exactly 12 half-steps.</p>
-        <p>m = 1, M = 2, A = 3 half-steps</p>
-    </section>
-</article>
+<%= render ScaleGeneratorWeb.InstructionsView, "instructions.html" %>
 
 <article class="row">
     <%= live_render @socket, ScaleGeneratorWeb.CreateScaleForm, [session: %{"all_scales" => @all_scales}, id: "create"] %>
