@@ -23,3 +23,28 @@
 .ok {
     color: green
 }
+
+.alert {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.close {
+    font-weight: bold;
+    float: right;
+}
+
+li {
+    list-style-type: none;
+}
+
+.ok-box {
+    background-color: #e8ffe8;
+    border: 1px solid green;
+}
+
+.error-box {
+    background-color: #fff7f4;
+    border: 1px solid orangered;
+}
