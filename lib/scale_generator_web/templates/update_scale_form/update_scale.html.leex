@@ -1,21 +1,6 @@
 <section class="column">
     <h3>Correct a scale type</h3>
-    <%= if live_flash(@flash, :notice) != nil do %>
-        <div class="alert ok-box" phx-click="lv:clear-flash"><span phx-click="lv:clear-flash" class="close">x</span>
-            <li class="ok" phx-click="lv:clear-flash" phx-value-key="notice">
-                <%= live_flash(@flash, :notice) %>
-            </li>
-        </div>
-    <% end %>
-    <%= if live_flash(@flash, :error) != nil do %>
-        <div class="alert error-box" phx-click="lv:clear-flash"><span phx-click="lv:clear-flash" class="close">x</span>
-            <%= for error <- live_flash(@flash, :error) do %>
-                <li class="error" phx-value-key="error">
-                    <%= error %>
-                </li>
-            <% end %>
-        </div>
-    <% end %>
+        <%= live_component @socket, ScaleGeneratorWeb.FlashComponent, flash: @flash %>
     <form phx-submit="update_scale" phx-change="change_update">
         <%= label :update_scale_form, :name, "Scale name: " %>
         <%= select :update_scale_form, :name, @all_scales, value: @name %>

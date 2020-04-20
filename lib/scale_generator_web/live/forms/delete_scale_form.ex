@@ -21,7 +21,7 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
   defp get_return_value(message, _name, socket) when message == :error do
     {:noreply,
      clear_flash(socket)
-     |> put_flash(:error, "Something went wrong")
+     |> put_flash(:error, ["Something went wrong"])
      |> assign(:ok, "")}
   end
 
