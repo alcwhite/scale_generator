@@ -48,3 +48,12 @@ li {
     background-color: #fff7f4;
     border: 1px solid orangered;
 }
+
+.center {
+    display: inline-block;
+    margin: .5rem;
+}
+
+.center-wrapper {
+    text-align: center;
+}

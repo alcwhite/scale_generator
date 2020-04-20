@@ -17,14 +17,14 @@
     </button>
 </div>
 
-<form phx-change="change" class="row">
+<form phx-change="change" class="row center-wrapper">
     <section class="column">
-        <%= label :scale_form, :tonic, "Tonic: " %>
-        <%= select :scale_form, :tonic, @all_tonics, value: @tonic %>
+        <%= label :scale_form, :tonic, "Tonic: ", class: "center" %>
+        <%= select :scale_form, :tonic, @all_tonics, [value: @tonic, class: "center"] %>
     </section>
-    <section class="column">
-        <%= label :scale_form, :name, "Scale name: " %>
-        <%= select :scale_form, :name, @all_scales, value: @scale %>
+    <section class="column center">
+        <%= label :scale_form, :name, "Scale name: ", class: "center" %>
+        <%= select :scale_form, :name, @all_scales, [value: @scale, class: "center"] %>
     </section>
 </form>
 
