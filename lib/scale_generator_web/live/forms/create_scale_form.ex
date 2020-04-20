@@ -3,8 +3,11 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
   use Phoenix.LiveView
 
   alias ScaleGenerator.Scales
+  alias Phoenix.PubSub
 
   def mount(_params, session, socket) do
+    PubSub.subscribe(:scales_pubsub, "update_scales")
+
     {:ok,
      assign(socket, :all_scales, session["all_scales"])
      |> assign(:show, false)
@@ -38,7 +41,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
         desc_pattern: desc_pattern
       })
 
-    get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket)
+    get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket.assigns.name, socket)
   end
 
   def handle_event("toggle_show", _event, socket) do
@@ -67,7 +70,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
      |> assign(:asc_pattern, pattern)}
   end
 
-  defp get_return_value(message, changeset, socket) when message == :error do
+  defp get_return_value(message, changeset, _name, socket) when message == :error do
     {:noreply,
      assign(
        socket,
@@ -76,15 +79,20 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
      )}
   end
 
-  defp get_return_value(message, _changeset, socket) when message == :ok do
-    send(socket.parent_pid, "update_scales")
-
+  defp get_return_value(message, _changeset, name, socket) when message == :ok do
+    all_scales = socket.assigns.all_scales ++ [name]
+    PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:add, all_scales})
     {:noreply,
      assign(socket, :show, false)
      |> assign(:name, "")
      |> assign(:asc_pattern, "")
      |> assign(:errors, [])
-     |> assign(:ok, "Saved")}
+     |> assign(:ok, "Saved")
+     |> assign(:all_scales, all_scales)}
+  end
+
+  def handle_info({:delete, list}, socket) do
+    {:noreply, assign(socket, :all_scales, list)}
   end
 
   def render(assigns) do

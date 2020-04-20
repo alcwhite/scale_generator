@@ -3,8 +3,10 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
   use Phoenix.LiveView
 
   alias ScaleGenerator.Scales
+  alias Phoenix.PubSub
 
   def mount(_params, session, socket) do
+    PubSub.subscribe(:scales_pubsub, "update_scales")
     {:ok,
      assign(socket, :all_scales, session["all_scales"])
      |> assign(:show, false)
@@ -79,14 +81,16 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
   end
 
   defp get_return_value(message, _changeset, socket) when message == :ok do
-    send(socket.parent_pid, "update_scales")
-
     {:noreply,
      assign(socket, :show, false)
      |> assign(:name, "chromatic")
      |> assign(:asc_pattern, "")
      |> assign(:ok, "Saved")
      |> assign(:errors, [])}
+  end
+
+  def handle_info({_action, list}, socket) do
+    {:noreply, assign(socket, :all_scales, list)}
   end
 
   def render(assigns) do

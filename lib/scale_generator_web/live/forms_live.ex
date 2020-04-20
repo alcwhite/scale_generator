@@ -3,6 +3,7 @@ defmodule ScaleGeneratorWeb.FormsLive do
   use Phoenix.LiveView
 
   alias ScaleGenerator.Scales
+  alias Phoenix.PubSub
 
   @tonic_list %{
     "C" => "261.54",
@@ -26,6 +27,8 @@ defmodule ScaleGeneratorWeb.FormsLive do
   @defaults %{tonic: "C", name: "chromatic", frequency: "261.54"}
 
   def mount(_params, _session, socket) do
+    PubSub.subscribe(:scales_pubsub, "update_scales")
+
     recording =
       ScaleGeneratorWeb.ScaleRecorder.record_scale(
         Map.get(@defaults, :name),
@@ -57,16 +60,16 @@ defmodule ScaleGeneratorWeb.FormsLive do
      |> assign(:recording, Enum.join(recording, " "))}
   end
 
-  def handle_info("update_scales", socket) do
-    {:noreply, assign(socket, :all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))}
-  end
-
   def handle_event("stop", _event, socket) do
     {:noreply, assign(socket, :play_text, "Play")}
   end
 
   def handle_event("play", _event, socket) do
     {:noreply, assign(socket, :play_text, "Stop")}
+  end
+
+  def handle_info({_action, list}, socket) do
+    {:noreply, assign(socket, :all_scales, list)}
   end
 
   def render(assigns) do
