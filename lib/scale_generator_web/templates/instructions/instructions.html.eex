@@ -3,6 +3,6 @@
         <p>Scale patterns must contain exactly 12 half-steps.</p>
     </section>
     <section class="column center">
-        <p>m = 1, M = 2, A = 3 half-steps</p>
+        <p>m = 1 half-step, M = 2 half-steps, A = 3 half-steps</p>
     </section>
 </article>
