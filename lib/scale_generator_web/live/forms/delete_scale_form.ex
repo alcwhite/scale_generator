@@ -38,7 +38,6 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
   end
 
   def handle_info({:add, list}, socket) do
-    IO.inspect("Adding!!!!!!!!!!!!!!!!!!")
     {:noreply, assign(socket, :all_scales, list)}
   end
 
