@@ -8,8 +8,7 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
   def mount(_params, session, socket) do
     PubSub.subscribe(:scales_pubsub, "update_scales")
 
-    {:ok,
-     assign(socket, :all_scales, session["all_scales"])}
+    {:ok, assign(socket, :all_scales, session["all_scales"])}
   end
 
   def handle_event("delete_scale", %{"delete_scale_form" => %{"name" => name}}, socket) do
@@ -21,14 +20,18 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
 
   defp get_return_value(message, _name, socket) when message == :error do
     {:noreply,
-     put_flash(socket, :error, "Something went wrong")
+     clear_flash(socket)
+     |> put_flash(:error, "Something went wrong")
      |> assign(:ok, "")}
   end
 
   defp get_return_value(message, name, socket) when message == :ok do
     all_scales = Enum.filter(socket.assigns.all_scales, fn x -> x != name end)
     PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:delete, all_scales})
-    {:noreply, put_flash(socket, :notice, "Deleted")
+
+    {:noreply,
+     clear_flash(socket)
+     |> put_flash(:notice, "Deleted")
      |> assign(:all_scales, all_scales)}
   end
 

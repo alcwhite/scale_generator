@@ -7,6 +7,7 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
 
   def mount(_params, session, socket) do
     PubSub.subscribe(:scales_pubsub, "update_scales")
+
     {:ok,
      assign(socket, :all_scales, session["all_scales"])
      |> assign(:show, false)
@@ -70,8 +71,8 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
 
   defp get_return_value(message, changeset, socket) when message == :error do
     {:noreply,
-     put_flash(
-       socket,
+     clear_flash(socket)
+     |> put_flash(
        :error,
        Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end))
      )}
@@ -82,6 +83,7 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
      assign(socket, :show, false)
      |> assign(:name, "chromatic")
      |> assign(:asc_pattern, "")
+     |> clear_flash
      |> put_flash(:notice, "Updated")}
   end
 

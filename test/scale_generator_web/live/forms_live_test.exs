@@ -46,8 +46,10 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
     assert 0 == Enum.count(Scales.list_scales())
 
     find_live_child(view, "create")
-      |> form("form", create_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""})
-      |> render_submit()
+    |> form("form",
+      create_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""}
+    )
+    |> render_submit()
 
     assert 1 == Enum.count(Scales.list_scales())
   end
@@ -61,8 +63,10 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
     {:ok, view, _html} = live(conn, "/")
 
     find_live_child(view, "update")
-      |> form("form", update_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""})
-      |> render_submit()
+    |> form("form",
+      update_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""}
+    )
+    |> render_submit()
 
     assert 1 == Enum.count(Scales.list_scales())
     assert "MMmMMMm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
@@ -75,10 +79,10 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
 
     {:ok, view, _html} = live(conn, "/")
 
-
     find_live_child(view, "destroy")
-      |> form("form", delete_scale_form: %{"name" => "whatever"})
-      |> render_submit()
+    |> form("form", delete_scale_form: %{"name" => "whatever"})
+    |> render_submit()
+
     assert 0 == Enum.count(Scales.list_scales())
   end
 end

@@ -70,8 +70,8 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
 
   defp get_return_value(message, changeset, _name, socket) when message == :error do
     {:noreply,
-     put_flash(
-       socket,
+     clear_flash(socket)
+     |> put_flash(
        :error,
        Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end))
      )}
@@ -80,10 +80,12 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
   defp get_return_value(message, _changeset, name, socket) when message == :ok do
     all_scales = socket.assigns.all_scales ++ [name]
     PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:add, all_scales})
+
     {:noreply,
      assign(socket, :show, false)
      |> assign(:name, "")
      |> assign(:asc_pattern, "")
+     |> clear_flash
      |> put_flash(:notice, "Saved")
      |> assign(:all_scales, all_scales)}
   end
