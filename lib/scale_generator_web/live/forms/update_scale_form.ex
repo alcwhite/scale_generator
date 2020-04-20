@@ -11,9 +11,7 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
      assign(socket, :all_scales, session["all_scales"])
      |> assign(:show, false)
      |> assign(:name, "chromatic")
-     |> assign(:asc_pattern, "")
-     |> assign(:errors, [])
-     |> assign(:ok, "")}
+     |> assign(:asc_pattern, "")}
   end
 
   def handle_event(
@@ -72,12 +70,11 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
 
   defp get_return_value(message, changeset, socket) when message == :error do
     {:noreply,
-     assign(
+     put_flash(
        socket,
-       :errors,
+       :error,
        Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end))
-     )
-     |> assign(:ok, "")}
+     )}
   end
 
   defp get_return_value(message, _changeset, socket) when message == :ok do
@@ -85,8 +82,7 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
      assign(socket, :show, false)
      |> assign(:name, "chromatic")
      |> assign(:asc_pattern, "")
-     |> assign(:ok, "Saved")
-     |> assign(:errors, [])}
+     |> put_flash(:notice, "Updated")}
   end
 
   def handle_info({_action, list}, socket) do

@@ -1,9 +1,17 @@
 <section class="column">
     <h3>Add a scale type</h3>
-    <%= for error <- @errors do %>
-        <p class="error"><%= error %></p>
+    <%= if live_flash(@flash, :notice) != nil do %>
+        <p class="alert ok" phx-click="lv:clear-flash" phx-value-key="notice">
+            <%= live_flash(@flash, :notice) %>
+        </p>
     <% end %>
-    <p class="ok"><%= @ok %></p>
+    <%= if live_flash(@flash, :error) != nil do %>
+        <%= for error <- live_flash(@flash, :error) do %>
+            <p class="alert error" phx-click="lv:clear-flash" phx-value-key="error">
+                <%= error %>
+            </p>
+        <% end %>
+    <% end %>
     <form phx-submit="create_scale" phx-change="change_create">
         <%= label :create_scale_form, :name, "Scale name: " %>
         <%= text_input :create_scale_form, :name, [placeholder: "Enter name of scale type", value: @name] %>
