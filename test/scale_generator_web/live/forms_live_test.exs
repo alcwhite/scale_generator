@@ -42,12 +42,12 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
   end
 
   test "add scales", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/forms")
     assert 0 == Enum.count(Scales.list_scales())
 
     find_live_child(view, "create")
     |> form("form",
-      create_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""}
+      create_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
     )
     |> render_submit()
 
@@ -60,11 +60,14 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
     assert 1 == Enum.count(Scales.list_scales())
     assert "MMMMMmm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
 
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/forms")
+
+    element(view, "button", "Correct")
+    |> render_click
 
     find_live_child(view, "update")
     |> form("form",
-      update_scale_form: %{"name" => "whatever", "pattern" => "MMmMMMm", "desc_pattern" => ""}
+      update_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
     )
     |> render_submit()
 
@@ -77,7 +80,10 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
     Scales.create_scale(%{name: "whatever", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
     assert 1 == Enum.count(Scales.list_scales())
 
-    {:ok, view, _html} = live(conn, "/")
+    {:ok, view, _html} = live(conn, "/forms")
+
+    element(view, "button", "Remove")
+    |> render_click
 
     find_live_child(view, "destroy")
     |> form("form", delete_scale_form: %{"name" => "whatever"})

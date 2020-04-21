@@ -12,7 +12,8 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
      assign(socket, :all_scales, session["all_scales"])
      |> assign(:show, false)
      |> assign(:name, "chromatic")
-     |> assign(:asc_pattern, "")}
+     |> assign(:asc_pattern, "")
+     |> assign(:error_fields, [])}
   end
 
   def handle_event(
@@ -20,7 +21,7 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
         %{
           "update_scale_form" => %{
             "name" => name,
-            "pattern" => pattern,
+            "asc_pattern" => pattern,
             "desc_pattern" => desc_pattern
           }
         },
@@ -55,23 +56,25 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
 
   def handle_event(
         "change_update",
-        %{
-          "update_scale_form" => %{
-            "name" => name,
-            "pattern" => pattern,
-            "desc_pattern" => _desc_pattern
-          }
-        },
+        event,
         socket
       ) do
     {:noreply,
-     assign(socket, :name, name)
-     |> assign(:asc_pattern, pattern)}
+     assign(socket, :name, event["update_scale_form"]["name"])
+     |> assign(:asc_pattern, event["update_scale_form"]["asc_pattern"])
+     |> assign(:error_fields, [])
+     |> assign(:error_fields, Enum.filter(socket.assigns.error_fields, fn x -> List.last(event["_target"]) != to_string(x) end))}
+  end
+
+  def handle_event("clear", _event, socket) do
+    {:noreply, assign(socket, :error_fields, [])
+     |> clear_flash}
   end
 
   defp get_return_value(message, changeset, socket) when message == :error do
     {:noreply,
      clear_flash(socket)
+     |> assign(:error_fields, Keyword.keys(changeset.errors))
      |> put_flash(
        :error,
        Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end))
@@ -84,7 +87,8 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
      |> assign(:name, "chromatic")
      |> assign(:asc_pattern, "")
      |> clear_flash
-     |> put_flash(:notice, "Updated")}
+     |> put_flash(:notice, "Updated")
+     |> assign(:error_fields, [])}
   end
 
   def handle_info({_action, list}, socket) do

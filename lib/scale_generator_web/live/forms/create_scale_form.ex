@@ -12,7 +12,8 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
      assign(socket, :all_scales, session["all_scales"])
      |> assign(:show, false)
      |> assign(:name, "")
-     |> assign(:asc_pattern, "")}
+     |> assign(:asc_pattern, "")
+     |> assign(:error_fields, [])}
   end
 
   def handle_event(
@@ -20,7 +21,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
         %{
           "create_scale_form" => %{
             "name" => name,
-            "pattern" => pattern,
+            "asc_pattern" => pattern,
             "desc_pattern" => desc_pattern
           }
         },
@@ -52,25 +53,26 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
     {:noreply, assign(socket, :show, new_assign)}
   end
 
+  def handle_event("clear", _event, socket) do
+    {:noreply, assign(socket, :error_fields, [])
+     |> clear_flash}
+  end
+
   def handle_event(
         "change_create",
-        %{
-          "create_scale_form" => %{
-            "name" => name,
-            "pattern" => pattern,
-            "desc_pattern" => _desc_pattern
-          }
-        },
+        event,
         socket
       ) do
     {:noreply,
-     assign(socket, :name, name)
-     |> assign(:asc_pattern, pattern)}
+     assign(socket, :name, event["create_scale_form"]["name"])
+     |> assign(:asc_pattern, event["create_scale_form"]["asc_pattern"])
+     |> assign(:error_fields, Enum.filter(socket.assigns.error_fields, fn x -> List.last(event["_target"]) != to_string(x) end))}
   end
 
   defp get_return_value(message, changeset, _name, socket) when message == :error do
     {:noreply,
      clear_flash(socket)
+     |> assign(:error_fields, Keyword.keys(changeset.errors))
      |> put_flash(
        :error,
        Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end))
@@ -84,6 +86,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
     {:noreply,
      assign(socket, :show, false)
      |> assign(:name, "")
+     |> assign(:error_fields, [])
      |> assign(:asc_pattern, "")
      |> clear_flash
      |> put_flash(:notice, "Saved")

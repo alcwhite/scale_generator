@@ -18,6 +18,10 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
     get_return_value(elem(return_value, 0), name, socket)
   end
 
+  def handle_event("clear", _event, socket) do
+    {:noreply, clear_flash(socket)}
+  end
+
   defp get_return_value(message, _name, socket) when message == :error do
     {:noreply,
      clear_flash(socket)

@@ -16,7 +16,8 @@ defmodule ScaleGeneratorWeb.Router do
   scope "/", ScaleGeneratorWeb do
     pipe_through :browser
 
-    live "/", FormsLive
+    live "/", MainLive
+    live "/forms", FormsLive
   end
 
   # Other scopes may use custom stacks.

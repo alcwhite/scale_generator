@@ -7,7 +7,7 @@ defmodule ScaleGeneratorWeb.LabelledTextInputComponent do
     <%= if @show do %>
       <section class="column center">
         <%= label @form, @field, @label %>
-        <%= text_input @form, @field, [placeholder: @placeholder, value: @value] %>
+        <%= text_input @form, @field, [placeholder: @placeholder, value: @value, class: if Enum.member?(@error_fields, @field) do "error-field" end] %>
       </section>
     <% end %>
 

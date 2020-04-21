@@ -1,14 +1,18 @@
-<section class="column">
-    <h3>Add a scale type</h3>
-    <%= live_component @socket, ScaleGeneratorWeb.FlashComponent, flash: @flash %>
-    <form phx-submit="create_scale" phx-change="change_create">
-        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :name, label: "Scale name: ", value: @name, placeholder: "Enter name of scale type", show: true] %>
+<article class="row">
+    <section class="column">
+        <h3>Add a scale type</h3>
+        <form phx-submit="create_scale" phx-change="change_create">
+            <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :name, label: "Scale name: ", value: @name, placeholder: "Enter name of scale type", show: true, error_fields: @error_fields] %>
 
-        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :pattern, label: "Pattern: ", value: @asc_pattern, placeholder: "Using m, M, A", show: true] %>
+            <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :asc_pattern, label: "Pattern: ", value: @asc_pattern, placeholder: "Using m, M, A", show: true, error_fields: @error_fields] %>
 
-        <%= live_component @socket, ScaleGeneratorWeb.DescendingCheckboxComponent, show: @show %>
-        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :desc_pattern, label: "Descending pattern: ", value: "", placeholder: "Using m, M, A", show: @show] %>
+            <%= live_component @socket, ScaleGeneratorWeb.DescendingCheckboxComponent, show: @show %>
+            <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :create_scale_form, field: :desc_pattern, label: "Descending pattern: ", value: "", placeholder: "Using m, M, A", show: @show, error_fields: @error_fields] %>
 
-        <%= submit "Add", phx_disable_with: "Adding..." %>
-    </form>
-</section>
+            <%= submit "Add", phx_disable_with: "Adding..." %>
+        </form>
+    </section>
+    <section class="column">
+        <%= live_component @socket, ScaleGeneratorWeb.FlashComponent, flash: @flash %>
+    </section>
+</article>

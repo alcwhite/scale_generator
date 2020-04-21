@@ -57,3 +57,19 @@ li {
 .center-wrapper {
     text-align: center;
 }
+
+.forms-group {
+    margin: auto;
+    display: block;
+    min-height: 62vh;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 3rem;
+}
+
+input.error-field {
+    border: 1px solid orangered;
+}

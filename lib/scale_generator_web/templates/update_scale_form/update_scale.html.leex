@@ -1,14 +1,18 @@
-<section class="column">
-    <h3>Correct a scale type</h3>
+<article class="row">
+    <section class="column">
+        <h3>Correct a scale type</h3>
+        <form phx-submit="update_scale" phx-change="change_update">
+            <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :update_scale_form, field: :name, label: "Scale name: ", list: @all_scales, value: @name] %>
+
+            <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :update_scale_form, field: :asc_pattern, label: "Pattern: ", value: @asc_pattern, show: true, placeholder: "Using m, M, A", error_fields: @error_fields] %>
+
+            <%= live_component @socket, ScaleGeneratorWeb.DescendingCheckboxComponent, show: @show %>
+            <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :update_scale_form, field: :desc_pattern, label: "Descending pattern: ", value: "", show: @show, placeholder: "Using m, M, A", error_fields: @error_fields] %>
+
+            <%= submit "Update", phx_disable_with: "Updating..." %>
+        </form>
+    </section>
+    <section class="column">
         <%= live_component @socket, ScaleGeneratorWeb.FlashComponent, flash: @flash %>
-    <form phx-submit="update_scale" phx-change="change_update">
-        <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :update_scale_form, field: :name, label: "Scale name: ", list: @all_scales, value: @name] %>
-
-        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :update_scale_form, field: :pattern, label: "Pattern: ", value: @asc_pattern, show: true, placeholder: "Using m, M, A"] %>
-
-        <%= live_component @socket, ScaleGeneratorWeb.DescendingCheckboxComponent, show: @show %>
-        <%= live_component @socket, ScaleGeneratorWeb.LabelledTextInputComponent, [form: :update_scale_form, field: :desc_pattern, label: "Descending pattern: ", value: "", show: @show, placeholder: "Using m, M, A"] %>
-
-        <%= submit "Update", phx_disable_with: "Updating..." %>
-    </form>
-</section>
+    </section>
+</article>

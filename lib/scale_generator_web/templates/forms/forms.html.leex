@@ -1,24 +1,11 @@
-<div class="phx-hero">
-    <%= live_component @socket, ScaleGeneratorWeb.ScaleComponent, [direction: "ascending", tonic: @tonic, scale: @scale] %>
-    <%= live_component @socket, ScaleGeneratorWeb.ScaleComponent, [direction: "descending", tonic: @tonic, scale: @scale] %>
-
-    <p class="lead"><%= scale_name(@tonic, @scale) %></p>
-
-    <button data-action="<%= @play_text %>" id="scale_player" phx-hook="PlayScale" data-recording="<%= @recording %>">
-        <%= @play_text %>
-    </button>
-</div>
-
-<form phx-change="change" class="row center-wrapper">
-    <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :scale_form, field: :tonic, label: "Tonic: ", list: @all_tonics, value: @tonic] %>
-    <%= live_component @socket, ScaleGeneratorWeb.LabelledSelectComponent, [form: :scale_form, field: :name, label: "Scale name: ", list: @all_scales, value: @scale] %>
-</form>
-
 <%= render ScaleGeneratorWeb.InstructionsView, "instructions.html" %>
+<section class="forms-group">
+    <nav role="navigation">
+        <%= live_component @socket, ScaleGeneratorWeb.TabComponent, [chosen_form: @chosen_form, message: "Add", form_code: :create] %>
+        <%= live_component @socket, ScaleGeneratorWeb.TabComponent, [chosen_form: @chosen_form, message: "Correct", form_code: :update] %>
+        <%= live_component @socket, ScaleGeneratorWeb.TabComponent, [chosen_form: @chosen_form, message: "Remove", form_code: :destroy] %>
+    </nav>
 
-<article class="row">
-    <%= live_render @socket, ScaleGeneratorWeb.CreateScaleForm, [session: %{"all_scales" => @all_scales}, id: "create"] %>
-    <%= live_render @socket, ScaleGeneratorWeb.UpdateScaleForm, [session: %{"all_scales" => @all_scales}, id: "update"] %>
-    <%= live_render @socket, ScaleGeneratorWeb.DeleteScaleForm, [session: %{"all_scales" => @all_scales}, id: "destroy"] %>
-</article>
+    <%= live_render @socket, @chosen_form_controller, [session: %{"all_scales" => @all_scales}, id: @chosen_form] %>
 
+</section>

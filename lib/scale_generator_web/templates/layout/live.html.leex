@@ -12,10 +12,7 @@
     <header>
       <section class="container">
         <nav role="navigation">
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started with Phoenix</a></li>
-            <li><a href="https://exercism.io/tracks/elixir/exercises/scale-generator">Based on the Scale Generator Exercism</a></li>
-          </ul>
+          <a href="<%= @link %>"><button><%= @link_name %></button></a>
         </nav>
         <a href="https://phoenixframework.org/" class="phx-logo">
           <img src="<%= Routes.static_path(@socket, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
@@ -27,6 +24,14 @@
       <p><%= live_flash(@flash, :error) %></p>
       <%= @inner_content %>
     </main>
+    <footer>
+      <nav role="navigation">
+        <ul>
+          <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started with Phoenix</a></li>
+          <li><a href="https://exercism.io/tracks/elixir/exercises/scale-generator">Based on the Scale Generator Exercism</a></li>
+        </ul>
+      </nav>
+    </footer>
     <%= csrf_meta_tag() %>
     <script type="text/javascript" src="<%= Routes.static_path(@socket, "/js/app.js") %>"></script>
   </body>

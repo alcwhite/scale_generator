@@ -26,7 +26,7 @@ defmodule ScaleGeneratorWeb.ScaleRecorder do
 
   def record_scale(name, tonic_frequency, direction) when direction == :asc do
     pattern =
-      ScaleGeneratorWeb.FormsView.get_pattern(
+      ScaleGeneratorWeb.MainView.get_pattern(
         Enum.find(Scales.list_scales(), fn s -> s.name == name end),
         direction
       )
@@ -39,7 +39,7 @@ defmodule ScaleGeneratorWeb.ScaleRecorder do
 
   def record_scale(name, tonic_frequency, direction) when direction == :desc do
     pattern =
-      ScaleGeneratorWeb.FormsView.get_pattern(
+      ScaleGeneratorWeb.MainView.get_pattern(
         Enum.find(Scales.list_scales(), fn s -> s.name == name end),
         direction
       )
