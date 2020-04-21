@@ -11,84 +11,144 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
     end)
   end
 
-  test "GET /", %{conn: conn} do
-    conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "C chromatic"
+  describe "forms" do
+    test "GET /", %{conn: conn} do
+      conn = get(conn, "/")
+      assert html_response(conn, 200) =~ "C chromatic"
 
-    Enum.each(create_spans("C C# D D# E F F# G G# A A# B C", "asc"), fn span ->
-      assert html_response(conn, 200) =~ span
-    end)
+      Enum.each(create_spans("C C# D D# E F F# G G# A A# B C", "asc"), fn span ->
+        assert html_response(conn, 200) =~ span
+      end)
 
-    {:ok, _view, _html} = live(conn)
+      {:ok, _view, _html} = live(conn)
+    end
+
+    test "main form events", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/")
+      Scales.create_scale(%{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "mMMMmMM"})
+
+      Enum.each(create_spans("D D# E F F# G G# A A# B C C# D", "asc"), fn span ->
+        assert render_change(view, :change, %{
+                 "scale_form" => %{"tonic" => "D", "name" => "chromatic"}
+               }) =~ span
+      end)
+
+      assert render_change(view, :change, %{"scale_form" => %{"tonic" => "D#", "name" => "major"}}) =~
+               "D# major"
+
+      Enum.each(create_spans("E F# G# A B C# D# E", "asc"), fn span ->
+        assert render_change(view, :change, %{"scale_form" => %{"tonic" => "E", "name" => "major"}}) =~
+                 span
+      end)
+    end
+
+    test "add scales", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/forms")
+      assert 0 == Enum.count(Scales.list_scales())
+
+      find_live_child(view, "create")
+      |> form("form",
+        create_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
+      )
+      |> render_submit()
+
+      assert 1 == Enum.count(Scales.list_scales())
+    end
+
+    test "edit scales", %{conn: conn} do
+      assert 0 == Enum.count(Scales.list_scales())
+      Scales.create_scale(%{name: "whatever", asc_pattern: "MMMMMmm", desc_pattern: "mmmMMmMM"})
+      assert 1 == Enum.count(Scales.list_scales())
+      assert "MMMMMmm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
+
+      {:ok, view, _html} = live(conn, "/forms")
+
+      element(view, "button", "Correct")
+      |> render_click
+
+      find_live_child(view, "update")
+      |> form("form",
+        update_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
+      )
+      |> render_submit()
+
+      assert 1 == Enum.count(Scales.list_scales())
+      assert "MMmMMMm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
+    end
+
+    test "delete scales", %{conn: conn} do
+      assert 0 == Enum.count(Scales.list_scales())
+      Scales.create_scale(%{name: "whatever", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
+      assert 1 == Enum.count(Scales.list_scales())
+
+      {:ok, view, _html} = live(conn, "/forms")
+
+      element(view, "button", "Remove")
+      |> render_click
+
+      find_live_child(view, "destroy")
+      |> form("form", delete_scale_form: %{"name" => "whatever"})
+      |> render_submit()
+
+      assert 0 == Enum.count(Scales.list_scales())
+    end
   end
 
-  test "main form events", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/")
-    Scales.create_scale(%{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "mMMMmMM"})
+  describe "pubsub" do
+    test "adds scales", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/forms")
+      {:ok, main_view, _html} = live(conn, "/")
+      {:ok, delete_view, _html} = live(conn, "/forms")
+      {:ok, update_view, _html} = live(conn, "/forms")
 
-    Enum.each(create_spans("D D# E F F# G G# A A# B C C# D", "asc"), fn span ->
-      assert render_change(view, :change, %{
-               "scale_form" => %{"tonic" => "D", "name" => "chromatic"}
-             }) =~ span
-    end)
+      element(delete_view, "button", "Remove")
+      |> render_click
+      element(update_view, "button", "Correct")
+      |> render_click
 
-    assert render_change(view, :change, %{"scale_form" => %{"tonic" => "D#", "name" => "major"}}) =~
-             "D# major"
+      assert 0 == Enum.count(Scales.list_scales())
+      assert false == has_element?(main_view, "#scale_form_name option")
+      assert false == has_element?(delete_view, "option")
+      assert false == has_element?(update_view, "option")
 
-    Enum.each(create_spans("E F# G# A B C# D# E", "asc"), fn span ->
-      assert render_change(view, :change, %{"scale_form" => %{"tonic" => "E", "name" => "major"}}) =~
-               span
-    end)
-  end
 
-  test "add scales", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/forms")
-    assert 0 == Enum.count(Scales.list_scales())
+      find_live_child(view, "create")
+      |> form("form",
+        create_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
+      )
+      |> render_submit()
 
-    find_live_child(view, "create")
-    |> form("form",
-      create_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
-    )
-    |> render_submit()
+      assert 1 == Enum.count(Scales.list_scales())
+      assert true == has_element?(main_view, "#scale_form_name option")
+      assert true == has_element?(delete_view, "option")
+      assert true == has_element?(update_view, "option")
+    end
 
-    assert 1 == Enum.count(Scales.list_scales())
-  end
+    test "deletes scales", %{conn: conn} do
+      assert 0 == Enum.count(Scales.list_scales())
+      Scales.create_scale(%{name: "whatever", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
+      assert 1 == Enum.count(Scales.list_scales())
 
-  test "edit scales", %{conn: conn} do
-    assert 0 == Enum.count(Scales.list_scales())
-    Scales.create_scale(%{name: "whatever", asc_pattern: "MMMMMmm", desc_pattern: "mmmMMmMM"})
-    assert 1 == Enum.count(Scales.list_scales())
-    assert "MMMMMmm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
+      {:ok, view, _html} = live(conn, "/forms")
+      {:ok, main_view, _html} = live(conn, "/")
+      {:ok, update_view, _html} = live(conn, "/forms")
 
-    {:ok, view, _html} = live(conn, "/forms")
+      element(update_view, "button", "Correct")
+      |> render_click
 
-    element(view, "button", "Correct")
-    |> render_click
+      assert true == has_element?(main_view, "#scale_form_name option")
+      assert true == has_element?(update_view, "option")
 
-    find_live_child(view, "update")
-    |> form("form",
-      update_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
-    )
-    |> render_submit()
+      element(view, "button", "Remove")
+      |> render_click
 
-    assert 1 == Enum.count(Scales.list_scales())
-    assert "MMmMMMm" == Scales.get_scale!(Enum.at(Scales.list_scales(), 0).id).asc_pattern
-  end
+      find_live_child(view, "destroy")
+      |> form("form", delete_scale_form: %{"name" => "whatever"})
+      |> render_submit()
 
-  test "delete scales", %{conn: conn} do
-    assert 0 == Enum.count(Scales.list_scales())
-    Scales.create_scale(%{name: "whatever", asc_pattern: "MMmMMmmm", desc_pattern: "mmmMMmMM"})
-    assert 1 == Enum.count(Scales.list_scales())
-
-    {:ok, view, _html} = live(conn, "/forms")
-
-    element(view, "button", "Remove")
-    |> render_click
-
-    find_live_child(view, "destroy")
-    |> form("form", delete_scale_form: %{"name" => "whatever"})
-    |> render_submit()
-
-    assert 0 == Enum.count(Scales.list_scales())
+      assert 0 == Enum.count(Scales.list_scales())
+      assert false == has_element?(main_view, "#scale_form_name option")
+      assert false == has_element?(update_view, "option")
+    end
   end
 end
