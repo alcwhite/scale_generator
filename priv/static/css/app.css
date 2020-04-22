@@ -194,13 +194,12 @@ li {
 .forms-group {
     margin: auto;
     display: block;
-    min-height: 62vh;
 }
 
 footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
-    left: 3rem;
+    left: 2rem;
 }
 
 input.error-field {
