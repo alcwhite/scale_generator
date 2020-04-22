@@ -57,13 +57,13 @@ defmodule ScaleGenerator.Helpers do
 
   defp broadcast(name, socket, ok_message) when ok_message == "Saved" do
     all_scales = socket.assigns.all_scales ++ [name]
-    PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:add, all_scales})
+    PubSub.broadcast_from(ScaleGenerator.PubSub, self(), "update_scales", {:add, all_scales})
     LiveView.assign(socket, all_scales: all_scales)
   end
 
   defp broadcast(name, socket, ok_message) when ok_message == "Deleted" do
     all_scales = Enum.filter(socket.assigns.all_scales, fn x -> x != name end)
-    PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:delete, all_scales})
+    PubSub.broadcast_from(ScaleGenerator.PubSub, self(), "update_scales", {:delete, all_scales})
     LiveView.assign(socket, all_scales: all_scales)
   end
 

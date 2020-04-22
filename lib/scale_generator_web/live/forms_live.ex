@@ -6,8 +6,6 @@ defmodule ScaleGeneratorWeb.FormsLive do
   alias Phoenix.PubSub
 
   def mount(_params, _session, socket) do
-    PubSub.subscribe(:scales_pubsub, "update_scales")
-
     {:ok,
      assign(socket, :all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))
      |> assign(:link, "/")

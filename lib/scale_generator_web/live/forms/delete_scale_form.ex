@@ -7,7 +7,7 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
   alias ScaleGenerator.Helpers
 
   def mount(_params, session, socket) do
-    PubSub.subscribe(:scales_pubsub, "update_scales")
+    PubSub.subscribe(ScaleGenerator.PubSub, "update_scales")
 
     {:ok, assign(socket, :all_scales, session["all_scales"])}
   end

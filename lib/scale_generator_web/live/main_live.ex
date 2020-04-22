@@ -10,7 +10,7 @@ defmodule ScaleGeneratorWeb.MainLive do
   @all_tonics ~w(C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B)
 
   def mount(_params, _session, socket) do
-    PubSub.subscribe(:scales_pubsub, "update_scales")
+    PubSub.subscribe(ScaleGenerator.PubSub, "update_scales")
 
     {:ok,
      assign(socket, %{
