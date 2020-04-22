@@ -6,15 +6,18 @@ defmodule ScaleGeneratorWeb.MainLive do
   alias Phoenix.PubSub
   alias ScaleGenerator.Helpers
 
+  @defaults %{tonic: "C", name: "chromatic"}
+  @all_tonics ~w(C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B)
+
   def mount(_params, _session, socket) do
     PubSub.subscribe(:scales_pubsub, "update_scales")
 
     {:ok,
-     assign(socket, :tonic, Helpers.defaults().tonic)
-     |> assign(:scale, Helpers.defaults().name)
-     |> assign(:all_tonics, Map.keys(Helpers.tonic_list()))
+     assign(socket, :tonic, @defaults.tonic)
+     |> assign(:scale, @defaults.name)
+     |> assign(:all_tonics, @all_tonics)
      |> assign(:all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))
-     |> assign(:recording, Helpers.record(Helpers.defaults().name, Helpers.defaults().frequency))
+     |> assign(:recording, Helpers.record(@defaults.name, @defaults.tonic))
      |> assign(:play_text, "Play")
      |> assign(:link, "/forms")
      |> assign(:link_name, "Update Scales"), layout: {ScaleGeneratorWeb.LayoutView, "live.html"}}
@@ -24,7 +27,7 @@ defmodule ScaleGeneratorWeb.MainLive do
     {:noreply,
      assign(socket, :tonic, tonic)
      |> assign(:scale, name)
-     |> assign(:recording, Helpers.record(name, Helpers.tonic_list()[tonic]))}
+     |> assign(:recording, Helpers.record(name, tonic))}
   end
 
   def handle_event("stop", _event, socket) do
