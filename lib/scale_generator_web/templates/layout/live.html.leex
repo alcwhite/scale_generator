@@ -9,21 +9,23 @@
     <%= csrf_meta_tag() %>
   </head>
   <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <a href="<%= @link %>"><button><%= @link_name %></button></a>
-        </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@socket, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
-    </header>
-    <main role="main" class="container">
-      <p><%= live_flash(@flash, :notice) %></p>
-      <p><%= live_flash(@flash, :error) %></p>
-      <%= @inner_content %>
-    </main>
+    <section id="wrapper">
+      <header>
+        <section class="container">
+          <nav role="navigation">
+            <a href="<%= @link %>"><button><%= @link_name %></button></a>
+          </nav>
+          <a href="https://phoenixframework.org/" class="phx-logo">
+            <img src="<%= Routes.static_path(@socket, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
+          </a>
+        </section>
+      </header>
+      <main role="main" class="container">
+        <p><%= live_flash(@flash, :notice) %></p>
+        <p><%= live_flash(@flash, :error) %></p>
+        <%= @inner_content %>
+      </main>
+    </section>
     <footer id="footer">
       <nav role="navigation">
         <ul>

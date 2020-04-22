@@ -200,8 +200,18 @@ footer#footer {
     position: absolute;
     bottom: 0;
     left: 2rem;
+    height: 8.5rem;
 }
 
 input.error-field {
     border: 1px solid orangered;
+}
+
+.wrapper {
+    padding-bottom: 8.5rem;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
 }
