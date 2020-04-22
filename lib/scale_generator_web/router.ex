@@ -1,5 +1,6 @@
 defmodule ScaleGeneratorWeb.Router do
   use ScaleGeneratorWeb, :router
+  import Phoenix.LiveDashboard.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -18,6 +19,13 @@ defmodule ScaleGeneratorWeb.Router do
 
     live "/", MainLive
     live "/forms", FormsLive
+  end
+
+  if Mix.env() == :dev do
+    scope "/" do
+      pipe_through :browser
+      live_dashboard "/dashboard"
+    end
   end
 
   # Other scopes may use custom stacks.

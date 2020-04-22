@@ -3,7 +3,6 @@ defmodule ScaleGeneratorWeb.FormsLive do
   use Phoenix.LiveView
 
   alias ScaleGenerator.Scales
-  alias Phoenix.PubSub
 
   def mount(_params, _session, socket) do
     {:ok,
