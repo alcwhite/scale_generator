@@ -1,6 +1,7 @@
 defmodule ScaleGenerator.Helpers do
   alias Phoenix.LiveView
   alias Phoenix.PubSub
+  alias ScaleGenerator.ScaleRecorder
 
   @tonic_list %{
     "C" => "261.54",
@@ -70,8 +71,8 @@ defmodule ScaleGenerator.Helpers do
     frequency = @tonic_list[tonic]
 
     Enum.join(
-      ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :asc) ++
-        ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :desc),
+      ScaleRecorder.record_scale(name, frequency, :asc) ++
+        ScaleRecorder.record_scale(name, frequency, :desc),
       " "
     )
   end

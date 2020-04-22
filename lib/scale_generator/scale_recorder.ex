@@ -26,7 +26,7 @@ defmodule ScaleGenerator.ScaleRecorder do
 
   def record_scale(name, tonic_frequency, direction) when direction == :asc do
     pattern =
-      ScaleGeneratorWeb.MainView.get_pattern(
+      get_pattern(
         Enum.find(Scales.list_scales(), fn s -> s.name == name end),
         direction
       )
@@ -39,7 +39,7 @@ defmodule ScaleGenerator.ScaleRecorder do
 
   def record_scale(name, tonic_frequency, direction) when direction == :desc do
     pattern =
-      ScaleGeneratorWeb.MainView.get_pattern(
+      get_pattern(
         Enum.find(Scales.list_scales(), fn s -> s.name == name end),
         direction
       )
@@ -56,5 +56,19 @@ defmodule ScaleGenerator.ScaleRecorder do
           )
         ]
     end)
+  end
+
+  def get_pattern(scale, direction \\ :asc)
+
+  def get_pattern(scale, direction) when scale != nil and direction == :asc do
+    scale.asc_pattern
+  end
+
+  def get_pattern(scale, direction) when scale != nil and direction == :desc do
+    scale.desc_pattern
+  end
+
+  def get_pattern(_pattern, _direction) do
+    "mmmmmmmmmmmm"
   end
 end
