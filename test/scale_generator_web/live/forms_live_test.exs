@@ -1,6 +1,5 @@
 defmodule ScaleGeneratorWeb.FormsLiveTest do
   use ScaleGeneratorWeb.ConnCase
-  use Phoenix.ConnTest
   import Phoenix.LiveViewTest
   @endpoint ScaleGeneratorWeb.Endpoint
   alias ScaleGenerator.Scales
