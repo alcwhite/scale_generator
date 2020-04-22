@@ -30,11 +30,11 @@ defmodule ScaleGeneratorWeb.MainLive do
     PubSub.subscribe(:scales_pubsub, "update_scales")
 
     recording =
-      ScaleGeneratorWeb.ScaleRecorder.record_scale(
+      ScaleGenerator.ScaleRecorder.record_scale(
         Map.get(@defaults, :name),
         Map.get(@defaults, :frequency)
       ) ++
-        ScaleGeneratorWeb.ScaleRecorder.record_scale(
+        ScaleGenerator.ScaleRecorder.record_scale(
           Map.get(@defaults, :name),
           Map.get(@defaults, :frequency),
           :desc
@@ -53,8 +53,8 @@ defmodule ScaleGeneratorWeb.MainLive do
 
   def handle_event("change", %{"scale_form" => %{"tonic" => tonic, "name" => name}}, socket) do
     recording =
-      ScaleGeneratorWeb.ScaleRecorder.record_scale(name, Map.get(@tonic_list, tonic), :asc) ++
-        ScaleGeneratorWeb.ScaleRecorder.record_scale(name, Map.get(@tonic_list, tonic), :desc)
+      ScaleGenerator.ScaleRecorder.record_scale(name, Map.get(@tonic_list, tonic), :asc) ++
+        ScaleGenerator.ScaleRecorder.record_scale(name, Map.get(@tonic_list, tonic), :desc)
 
     {:noreply,
      assign(socket, :tonic, tonic)

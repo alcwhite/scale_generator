@@ -2,7 +2,7 @@ defmodule ScaleRecorderTest do
   use ExUnit.Case
   use ScaleGenerator.DataCase
 
-  alias ScaleGeneratorWeb.ScaleRecorder
+  alias ScaleGenerator.ScaleRecorder
   alias ScaleGenerator.Scales
 
   describe "record scale" do

@@ -4,6 +4,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
 
   alias ScaleGenerator.Scales
   alias Phoenix.PubSub
+  alias ScaleGenerator.Helpers
 
   def mount(_params, session, socket) do
     PubSub.subscribe(:scales_pubsub, "update_scales")
@@ -40,7 +41,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
         desc_pattern: desc_pattern
       })
 
-    get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket.assigns.name, socket)
+    Helpers.get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket, "Saved", socket.assigns.name)
   end
 
   def handle_event("toggle_show", _event, socket) do
@@ -67,30 +68,6 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
      assign(socket, :name, event["create_scale_form"]["name"])
      |> assign(:asc_pattern, event["create_scale_form"]["asc_pattern"])
      |> assign(:error_fields, Enum.filter(socket.assigns.error_fields, fn x -> List.last(event["_target"]) != to_string(x) end))}
-  end
-
-  defp get_return_value(message, changeset, _name, socket) when message == :error do
-    {:noreply,
-     clear_flash(socket)
-     |> assign(:error_fields, Keyword.keys(changeset.errors))
-     |> put_flash(
-       :error,
-       Enum.uniq(Enum.map(Keyword.values(changeset.errors), fn e -> elem(e, 0) end))
-     )}
-  end
-
-  defp get_return_value(message, _changeset, name, socket) when message == :ok do
-    all_scales = socket.assigns.all_scales ++ [name]
-    PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:add, all_scales})
-
-    {:noreply,
-     assign(socket, :show, false)
-     |> assign(:name, "")
-     |> assign(:error_fields, [])
-     |> assign(:asc_pattern, "")
-     |> clear_flash
-     |> put_flash(:notice, "Saved")
-     |> assign(:all_scales, all_scales)}
   end
 
   def handle_info({:delete, list}, socket) do

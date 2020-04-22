@@ -1,4 +1,4 @@
-defmodule ScaleGeneratorWeb.ScaleRecorder do
+defmodule ScaleGenerator.ScaleRecorder do
   alias ScaleGenerator.Scales
 
   @all_frequencies ~w(261.54 277.10 293.59 311.06 329.57 349.18 369.96 391.97 415.29 440.00 466.18 493.92 523.30 554.44 587.43 622.38 659.42 698.65 740.22 784.26 830.93 880.37 932.75 988.25)

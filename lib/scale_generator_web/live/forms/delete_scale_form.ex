@@ -4,6 +4,7 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
 
   alias ScaleGenerator.Scales
   alias Phoenix.PubSub
+  alias ScaleGenerator.Helpers
 
   def mount(_params, session, socket) do
     PubSub.subscribe(:scales_pubsub, "update_scales")
@@ -15,28 +16,11 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
     scale_id = Enum.find(Scales.list_scales(), fn s -> s.name == name end).id
     return_value = Scales.delete_scale(Scales.get_scale!(scale_id))
 
-    get_return_value(elem(return_value, 0), name, socket)
+    Helpers.get_return_value(elem(return_value, 0), %{errors: [field: "Something went wrong"]}, socket, "Deleted", name)
   end
 
   def handle_event("clear", _event, socket) do
     {:noreply, clear_flash(socket)}
-  end
-
-  defp get_return_value(message, _name, socket) when message == :error do
-    {:noreply,
-     clear_flash(socket)
-     |> put_flash(:error, ["Something went wrong"])
-     |> assign(:ok, "")}
-  end
-
-  defp get_return_value(message, name, socket) when message == :ok do
-    all_scales = Enum.filter(socket.assigns.all_scales, fn x -> x != name end)
-    PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:delete, all_scales})
-
-    {:noreply,
-     clear_flash(socket)
-     |> put_flash(:notice, "Deleted")
-     |> assign(:all_scales, all_scales)}
   end
 
   def handle_info({:add, list}, socket) do
