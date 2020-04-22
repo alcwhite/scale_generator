@@ -107,9 +107,9 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       |> render_click
 
       assert 0 == Enum.count(Scales.list_scales())
-      assert false == has_element?(main_view, "#scale_form_name option")
-      assert false == has_element?(delete_view, "option")
-      assert false == has_element?(update_view, "option")
+      refute has_element?(main_view, "#scale_form_name option")
+      refute has_element?(delete_view, "option")
+      refute has_element?(update_view, "option")
 
 
       find_live_child(view, "create")
@@ -119,9 +119,9 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       |> render_submit()
 
       assert 1 == Enum.count(Scales.list_scales())
-      assert true == has_element?(main_view, "#scale_form_name option")
-      assert true == has_element?(delete_view, "option")
-      assert true == has_element?(update_view, "option")
+      assert has_element?(main_view, "#scale_form_name option")
+      assert has_element?(delete_view, "option")
+      assert has_element?(update_view, "option")
     end
 
     test "deletes scales", %{conn: conn} do
@@ -136,8 +136,8 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       element(update_view, "button", "Correct")
       |> render_click
 
-      assert true == has_element?(main_view, "#scale_form_name option")
-      assert true == has_element?(update_view, "option")
+      assert has_element?(main_view, "#scale_form_name option")
+      assert has_element?(update_view, "option")
 
       element(view, "button", "Remove")
       |> render_click
@@ -147,8 +147,8 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       |> render_submit()
 
       assert 0 == Enum.count(Scales.list_scales())
-      assert false == has_element?(main_view, "#scale_form_name option")
-      assert false == has_element?(update_view, "option")
+      refute has_element?(main_view, "#scale_form_name option")
+      refute has_element?(update_view, "option")
     end
   end
 end
