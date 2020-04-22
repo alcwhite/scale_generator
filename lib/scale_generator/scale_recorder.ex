@@ -22,53 +22,38 @@ defmodule ScaleGenerator.ScaleRecorder do
     )
   end
 
-  def record_scale(name, tonic_frequency, direction \\ :asc)
-
-  def record_scale(name, tonic_frequency, direction) when direction == :asc do
+  def record_scale(name, tonic_frequency, direction \\ :asc) do
     pattern =
       get_pattern(
         Enum.find(Scales.list_scales(), fn s -> s.name == name end),
         direction
       )
+      |> String.graphemes()
 
-    (["T"] ++ String.graphemes(pattern))
+    ["T" | pattern]
     |> Enum.reduce([], fn note, acc ->
-      acc ++ [find_frequency(note, tonic_frequency, acc, @all_frequencies)]
+      acc ++ [next_frequency(note, tonic_frequency, acc, direction)]
     end)
   end
 
-  def record_scale(name, tonic_frequency, direction) when direction == :desc do
-    pattern =
-      get_pattern(
-        Enum.find(Scales.list_scales(), fn s -> s.name == name end),
-        direction
-      )
-
-    (["T"] ++ String.graphemes(pattern))
-    |> Enum.reduce([], fn note, acc ->
-      acc ++
-        [
-          find_frequency(
-            note,
-            top_tonic_freq(tonic_frequency),
-            acc,
-            Enum.reverse(@all_frequencies)
-          )
-        ]
-    end)
+  def next_frequency(note, tonic_frequency, acc, direction) when direction == :asc do
+    find_frequency(note, tonic_frequency, acc, @all_frequencies)
   end
 
-  def get_pattern(scale, direction \\ :asc)
-
-  def get_pattern(scale, direction) when scale != nil and direction == :asc do
-    scale.asc_pattern
+  def next_frequency(note, tonic_frequency, acc, direction) when direction == :desc do
+    find_frequency(
+      note,
+      top_tonic_freq(tonic_frequency),
+      acc,
+      Enum.reverse(@all_frequencies)
+    )
   end
 
-  def get_pattern(scale, direction) when scale != nil and direction == :desc do
-    scale.desc_pattern
-  end
-
-  def get_pattern(_pattern, _direction) do
+  def get_pattern(scale, _direction) when scale == nil do
     "mmmmmmmmmmmm"
+  end
+
+  def get_pattern(scale, direction) do
+    Map.get(scale, String.to_atom("#{direction}_pattern"), "mmmmmmmmmmmm")
   end
 end
