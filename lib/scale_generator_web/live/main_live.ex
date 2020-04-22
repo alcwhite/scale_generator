@@ -13,21 +13,21 @@ defmodule ScaleGeneratorWeb.MainLive do
     PubSub.subscribe(:scales_pubsub, "update_scales")
 
     {:ok,
-     assign(socket, :tonic, @defaults.tonic)
-     |> assign(:scale, @defaults.name)
-     |> assign(:all_tonics, @all_tonics)
-     |> assign(:all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))
-     |> assign(:recording, Helpers.record(@defaults.name, @defaults.tonic))
-     |> assign(:play_text, "Play")
-     |> assign(:link, "/forms")
-     |> assign(:link_name, "Update Scales"), layout: {ScaleGeneratorWeb.LayoutView, "live.html"}}
+     assign(socket, %{
+       tonic: @defaults.tonic,
+       scale: @defaults.name,
+       all_tonics: @all_tonics,
+       play_text: "Play",
+       link: "/forms",
+       link_name: "Update Scales",
+       recording: Helpers.record(@defaults.name, @defaults.tonic),
+       all_scales: Enum.map(Scales.list_scales(), fn s -> s.name end)
+     }), layout: {ScaleGeneratorWeb.LayoutView, "live.html"}}
   end
 
   def handle_event("change", %{"scale_form" => %{"tonic" => tonic, "name" => name}}, socket) do
     {:noreply,
-     assign(socket, :tonic, tonic)
-     |> assign(:scale, name)
-     |> assign(:recording, Helpers.record(name, tonic))}
+     assign(socket, %{tonic: tonic, scale: name, recording: Helpers.record(name, tonic)})}
   end
 
   def handle_event("stop", _event, socket) do

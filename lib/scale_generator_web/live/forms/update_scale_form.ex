@@ -10,11 +10,13 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
     PubSub.subscribe(:scales_pubsub, "update_scales")
 
     {:ok,
-     assign(socket, :all_scales, session["all_scales"])
-     |> assign(:show, false)
-     |> assign(:name, "chromatic")
-     |> assign(:asc_pattern, "")
-     |> assign(:error_fields, [])}
+     assign(socket, %{
+       all_scales: session["all_scales"],
+       show: false,
+       name: "chromatic",
+       asc_pattern: "",
+       error_fields: []
+     })}
   end
 
   def handle_event(
@@ -61,14 +63,19 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
         socket
       ) do
     {:noreply,
-     assign(socket, :name, event["update_scale_form"]["name"])
-     |> assign(:asc_pattern, event["update_scale_form"]["asc_pattern"])
-     |> assign(:error_fields, [])
-     |> assign(:error_fields, Enum.filter(socket.assigns.error_fields, fn x -> List.last(event["_target"]) != to_string(x) end))}
+     assign(socket, %{
+       name: event["update_scale_form"]["name"],
+       asc_pattern: event["update_scale_form"]["asc_pattern"],
+       error_fields:
+         Enum.filter(socket.assigns.error_fields, fn x ->
+           List.last(event["_target"]) != to_string(x)
+         end)
+     })}
   end
 
   def handle_event("clear", _event, socket) do
-    {:noreply, assign(socket, :error_fields, [])
+    {:noreply,
+     assign(socket, :error_fields, [])
      |> clear_flash}
   end
 

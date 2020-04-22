@@ -10,11 +10,13 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
     PubSub.subscribe(:scales_pubsub, "update_scales")
 
     {:ok,
-     assign(socket, :all_scales, session["all_scales"])
-     |> assign(:show, false)
-     |> assign(:name, "")
-     |> assign(:asc_pattern, "")
-     |> assign(:error_fields, [])}
+     assign(socket, %{
+       all_scales: session["all_scales"],
+       show: false,
+       name: "",
+       asc_pattern: "",
+       error_fields: []
+     })}
   end
 
   def handle_event(
@@ -41,7 +43,13 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
         desc_pattern: desc_pattern
       })
 
-    Helpers.get_return_value(elem(new_scale, 0), elem(new_scale, 1), socket, "Saved", socket.assigns.name)
+    Helpers.get_return_value(
+      elem(new_scale, 0),
+      elem(new_scale, 1),
+      socket,
+      "Saved",
+      socket.assigns.name
+    )
   end
 
   def handle_event("toggle_show", _event, socket) do
@@ -55,7 +63,8 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
   end
 
   def handle_event("clear", _event, socket) do
-    {:noreply, assign(socket, :error_fields, [])
+    {:noreply,
+     assign(socket, :error_fields, [])
      |> clear_flash}
   end
 
@@ -65,9 +74,14 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
         socket
       ) do
     {:noreply,
-     assign(socket, :name, event["create_scale_form"]["name"])
-     |> assign(:asc_pattern, event["create_scale_form"]["asc_pattern"])
-     |> assign(:error_fields, Enum.filter(socket.assigns.error_fields, fn x -> List.last(event["_target"]) != to_string(x) end))}
+     assign(socket, %{
+       name: event["create_scale_form"]["name"],
+       asc_pattern: event["create_scale_form"]["asc_pattern"],
+       error_fields:
+         Enum.filter(socket.assigns.error_fields, fn x ->
+           List.last(event["_target"]) != to_string(x)
+         end)
+     })}
   end
 
   def handle_info({:delete, list}, socket) do

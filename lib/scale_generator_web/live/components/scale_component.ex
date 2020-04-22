@@ -3,6 +3,7 @@ defmodule ScaleGeneratorWeb.ScaleComponent do
 
   def render(assigns) do
     directions = %{"ascending" => :asc, "descending" => :desc}
+
     ~L"""
     <p class="lead"><%= @direction %></p>
     <h2>
@@ -13,7 +14,3 @@ defmodule ScaleGeneratorWeb.ScaleComponent do
     """
   end
 end
-
-
-
-

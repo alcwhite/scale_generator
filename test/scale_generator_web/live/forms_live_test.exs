@@ -37,7 +37,9 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
                "D# major"
 
       Enum.each(create_spans("E F# G# A B C# D# E", "asc"), fn span ->
-        assert render_change(view, :change, %{"scale_form" => %{"tonic" => "E", "name" => "major"}}) =~
+        assert render_change(view, :change, %{
+                 "scale_form" => %{"tonic" => "E", "name" => "major"}
+               }) =~
                  span
       end)
     end
@@ -48,7 +50,11 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
 
       find_live_child(view, "create")
       |> form("form",
-        create_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
+        create_scale_form: %{
+          "name" => "whatever",
+          "asc_pattern" => "MMmMMMm",
+          "desc_pattern" => ""
+        }
       )
       |> render_submit()
 
@@ -68,7 +74,11 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
 
       find_live_child(view, "update")
       |> form("form",
-        update_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
+        update_scale_form: %{
+          "name" => "whatever",
+          "asc_pattern" => "MMmMMMm",
+          "desc_pattern" => ""
+        }
       )
       |> render_submit()
 
@@ -103,6 +113,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
 
       element(delete_view, "button", "Remove")
       |> render_click
+
       element(update_view, "button", "Correct")
       |> render_click
 
@@ -111,10 +122,13 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       refute has_element?(delete_view, "option")
       refute has_element?(update_view, "option")
 
-
       find_live_child(view, "create")
       |> form("form",
-        create_scale_form: %{"name" => "whatever", "asc_pattern" => "MMmMMMm", "desc_pattern" => ""}
+        create_scale_form: %{
+          "name" => "whatever",
+          "asc_pattern" => "MMmMMMm",
+          "desc_pattern" => ""
+        }
       )
       |> render_submit()
 

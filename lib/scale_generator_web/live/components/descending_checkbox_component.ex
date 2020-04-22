@@ -10,5 +10,3 @@ defmodule ScaleGeneratorWeb.DescendingCheckboxComponent do
     """
   end
 end
-
-

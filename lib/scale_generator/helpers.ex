@@ -33,13 +33,21 @@ defmodule ScaleGenerator.Helpers do
   end
 
   def get_return_value(message, _changeset, socket, ok_message, name) when message == :ok do
-    {:noreply, broadcast(name, socket, ok_message)
-     |> LiveView.assign(:show, false)
-     |> LiveView.assign(:name, if ok_message == "Saved" do "" else "chromatic" end)
-     |> LiveView.assign(:asc_pattern, "")
-     |> LiveView.clear_flash
-     |> LiveView.put_flash(:notice, ok_message)
-     |> LiveView.assign(:error_fields, [])}
+    {:noreply,
+     broadcast(name, socket, ok_message)
+     |> LiveView.assign(%{
+       show: false,
+       asc_pattern: "",
+       error_fields: [],
+       name:
+         if ok_message == "Saved" do
+           ""
+         else
+           "chromatic"
+         end
+     })
+     |> LiveView.clear_flash()
+     |> LiveView.put_flash(:notice, ok_message)}
   end
 
   defp broadcast(_name, socket, ok_message) when ok_message == "Updated" do
@@ -60,7 +68,11 @@ defmodule ScaleGenerator.Helpers do
 
   def record(name, tonic) do
     frequency = @tonic_list[tonic]
-    Enum.join(ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :asc) ++
-        ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :desc), " ")
+
+    Enum.join(
+      ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :asc) ++
+        ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :desc),
+      " "
+    )
   end
 end
