@@ -2,6 +2,27 @@ defmodule ScaleGenerator.Helpers do
   alias Phoenix.LiveView
   alias Phoenix.PubSub
 
+  def tonic_list(), do: %{
+    "C" => "261.54",
+    "C#" => "277.10",
+    "Db" => "277.10",
+    "D" => "293.59",
+    "D#" => "311.06",
+    "Eb" => "311.06",
+    "E" => "329.57",
+    "F" => "349.18",
+    "F#" => "369.96",
+    "Gb" => "369.96",
+    "G" => "391.97",
+    "G#" => "415.29",
+    "Ab" => "415.29",
+    "A" => "440.00",
+    "A#" => "466.18",
+    "Bb" => "466.18",
+    "B" => "493.92"
+  }
+  def defaults(), do: %{tonic: "C", name: "chromatic", frequency: "261.54"}
+
   def get_return_value(message, changeset, socket, _ok_message, _name) when message == :error do
     {:noreply,
      LiveView.clear_flash(socket)
@@ -36,5 +57,10 @@ defmodule ScaleGenerator.Helpers do
     all_scales = Enum.filter(socket.assigns.all_scales, fn x -> x != name end)
     PubSub.broadcast_from(:scales_pubsub, self(), "update_scales", {:delete, all_scales})
     LiveView.assign(socket, all_scales: all_scales)
+  end
+
+  def record(name, frequency) do
+    Enum.join(ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :asc) ++
+        ScaleGenerator.ScaleRecorder.record_scale(name, frequency, :desc), " ")
   end
 end
