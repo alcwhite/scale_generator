@@ -8,7 +8,7 @@ use Mix.Config
 # with webpack to recompile .js and .css sources.
 config :scale_generator, ScaleGeneratorWeb.Endpoint,
   http: [port: 4000],
-  debug_errors: true,
+  debug_errors: false,
   code_reloader: true,
   check_origin: false,
   watchers: [
@@ -49,7 +49,7 @@ config :scale_generator, ScaleGeneratorWeb.Endpoint,
 config :scale_generator, ScaleGeneratorWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(mp3|js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/scale_generator_web/(live|views)/.*(ex)$",
       ~r"lib/scale_generator_web/templates/.*(eex)$"
