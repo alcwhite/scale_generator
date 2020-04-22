@@ -10,6 +10,7 @@ defmodule ScaleGenerator.Application do
     children = [
       # Start the Ecto repository
       ScaleGenerator.Repo,
+      ScaleGeneratorWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: ScaleGenerator.PubSub},
       # Start the endpoint when the application starts
