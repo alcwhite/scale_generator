@@ -4,62 +4,47 @@ defmodule ScaleGenerator.ScaleGeneratorLogic do
   @flat_scales ~w(F Bb Eb Ab Db Gb d g c f bb eb)
   @step_names %{"m" => 1, "M" => 2, "A" => 3}
 
-  def upcase_tonic(tonic) do
-    if String.length(tonic) === 1 do
-      String.upcase(tonic)
-    else
-      String.upcase(String.at(tonic, 0)) <> String.at(tonic, 1)
-    end
-  end
+  def upcase_tonic(tonic) when byte_size(tonic) == 1, do: String.upcase(tonic)
+
+  def upcase_tonic(tonic) when byte_size(tonic) == 2,
+    do: String.upcase(String.at(tonic, 0)) <> String.at(tonic, 1)
 
   def step(scale, tonic, step) do
-    index = Enum.find_index(scale, fn x -> x === upcase_tonic(tonic) end)
+    index = Enum.find_index(scale, &(&1 == upcase_tonic(tonic)))
     Enum.at(scale, index + @step_names[step])
   end
 
-  def form_chromatic(scale, tonic) do
-    index = Enum.find_index(scale, fn x -> x === upcase_tonic(tonic) end)
+  def chromatic_scale(scale, tonic) do
+    index = Enum.find_index(scale, &(&1 == upcase_tonic(tonic)))
     Enum.slice(scale, index..Enum.count(scale)) ++ Enum.slice(scale, 0..index)
   end
 
-  def find_chromatic_scale(tonic) do
-    if Enum.member?(@flat_scales, tonic) do
-      flat_chromatic_scale(tonic)
-    else
-      chromatic_scale(tonic)
-    end
+  def chromatic_scale(tonic) when tonic in @flat_scales,
+    do: chromatic_scale(@chromatic_flat, tonic)
+
+  def chromatic_scale(tonic), do: chromatic_scale(@chromatic_sharp, tonic)
+
+  def scale(tonic, pattern), do: scale(tonic, pattern, :asc)
+
+  def scale(tonic, pattern, direction) do
+    scale_pattern = [upcase_tonic(tonic)] ++ String.graphemes(pattern)
+
+    chromatic_scale(tonic)
+    |> maybe_reverse_chromatic(direction)
+    |> add_notes(scale_pattern)
   end
 
-  def chromatic_scale(tonic \\ "C") do
-    form_chromatic(@chromatic_sharp, tonic)
-  end
+  defp add_notes(chromatic, pattern),
+    do:
+      pattern
+      |> Enum.reduce([], &(&2 ++ [maybe_add_note(&1, chromatic, List.last(&2))]))
 
-  def flat_chromatic_scale(tonic \\ "C") do
-    form_chromatic(@chromatic_flat, tonic)
-  end
+  defp maybe_add_note(note, chromatic, previous_note)
+       when is_map_key(@step_names, note) and not is_nil(previous_note),
+       do: step(chromatic, previous_note, note)
 
-  def add_note({scale, pattern, chromatic, scale_length, pattern_length})
-      when scale_length < pattern_length do
-    next_note =
-      step(chromatic, Enum.at(scale, scale_length - 1), String.at(pattern, scale_length - 1))
+  defp maybe_add_note(note, _, _), do: note
 
-    add_note({scale ++ [next_note], pattern, chromatic, scale_length + 1, pattern_length})
-  end
-
-  def add_note({scale, _pattern, _chromatic, scale_length, pattern_length})
-      when scale_length === pattern_length do
-    scale ++ [Enum.at(scale, 0)]
-  end
-
-  def scale(tonic, pattern, direction \\ :asc)
-
-  def scale(tonic, pattern, direction) when direction == :asc do
-    chromatic = find_chromatic_scale(tonic)
-    add_note({[upcase_tonic(tonic)], pattern, chromatic, 1, String.length(pattern)})
-  end
-
-  def scale(tonic, pattern, direction) when direction == :desc do
-    chromatic = Enum.reverse(find_chromatic_scale(tonic))
-    add_note({[upcase_tonic(tonic)], pattern, chromatic, 1, String.length(pattern)})
-  end
+  defp maybe_reverse_chromatic(chromatic, :asc), do: chromatic
+  defp maybe_reverse_chromatic(chromatic, :desc), do: Enum.reverse(chromatic)
 end

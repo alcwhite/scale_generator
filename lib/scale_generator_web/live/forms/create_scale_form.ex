@@ -36,7 +36,7 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
         _ -> desc_pattern
       end
 
-    new_scale =
+    {message, changeset} =
       Scales.create_scale(%{
         name: String.downcase(name),
         asc_pattern: pattern,
@@ -44,8 +44,8 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
       })
 
     Helpers.get_return_value(
-      elem(new_scale, 0),
-      elem(new_scale, 1),
+      message,
+      changeset,
       socket,
       "Saved",
       socket.assigns.name
@@ -63,24 +63,26 @@ defmodule ScaleGeneratorWeb.CreateScaleForm do
   end
 
   def handle_event("clear", _event, socket) do
-    {:noreply,
-     assign(socket, :error_fields, [])
-     |> clear_flash}
+    socket =
+      assign(socket, :error_fields, [])
+      |> clear_flash
+
+    {:noreply, socket}
   end
 
   def handle_event(
         "change_create",
-        event,
+        %{
+          "_target" => ["create_scale_form", changed_field],
+          "create_scale_form" => %{"name" => name, "asc_pattern" => asc_pattern}
+        },
         socket
       ) do
     {:noreply,
      assign(socket, %{
-       name: event["create_scale_form"]["name"],
-       asc_pattern: event["create_scale_form"]["asc_pattern"],
-       error_fields:
-         Enum.filter(socket.assigns.error_fields, fn x ->
-           List.last(event["_target"]) != to_string(x)
-         end)
+       name: name,
+       asc_pattern: asc_pattern,
+       error_fields: Enum.filter(socket.assigns.error_fields, &(changed_field != to_string(&1)))
      })}
   end
 
