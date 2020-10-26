@@ -27,18 +27,17 @@ defmodule ScaleGenerator.ScaleGeneratorLogic do
   def scale(tonic, pattern), do: scale(tonic, pattern, :asc)
 
   def scale(tonic, pattern, direction) do
-    scale_pattern = [upcase_tonic(tonic)] ++ String.split(pattern, "")
+    scale_pattern = [upcase_tonic(tonic)] ++ String.graphemes(pattern)
 
     chromatic_scale(tonic)
     |> maybe_reverse_chromatic(direction)
     |> add_notes(scale_pattern)
   end
 
-  defp add_notes(chromatic, pattern) do
-    pattern
-    |> Enum.filter(&(&1 != ""))
-    |> Enum.reduce([], &(&2 ++ [maybe_add_note(&1, chromatic, List.last(&2))]))
-  end
+  defp add_notes(chromatic, pattern),
+    do:
+      pattern
+      |> Enum.reduce([], &(&2 ++ [maybe_add_note(&1, chromatic, List.last(&2))]))
 
   defp maybe_add_note(note, chromatic, previous_note)
        when is_map_key(@step_names, note) and not is_nil(previous_note),
