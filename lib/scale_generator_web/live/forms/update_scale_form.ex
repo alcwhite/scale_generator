@@ -59,17 +59,17 @@ defmodule ScaleGeneratorWeb.UpdateScaleForm do
 
   def handle_event(
         "change_update",
-        event,
+        %{
+          "_target" => ["Update_scale_form", changed_field],
+          "update_scale_form" => %{"name" => name, "asc_pattern" => asc_pattern}
+        },
         socket
       ) do
     {:noreply,
      assign(socket, %{
-       name: event["update_scale_form"]["name"],
-       asc_pattern: event["update_scale_form"]["asc_pattern"],
-       error_fields:
-         Enum.filter(socket.assigns.error_fields, fn x ->
-           List.last(event["_target"]) != to_string(x)
-         end)
+       name: name,
+       asc_pattern: asc_pattern,
+       error_fields: Enum.filter(socket.assigns.error_fields, &(changed_field != to_string(&1)))
      })}
   end
 

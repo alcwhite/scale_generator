@@ -14,10 +14,10 @@ defmodule ScaleGeneratorWeb.DeleteScaleForm do
 
   def handle_event("delete_scale", %{"delete_scale_form" => %{"name" => name}}, socket) do
     scale_id = Enum.find(Scales.list_scales(), fn s -> s.name == name end).id
-    return_value = Scales.delete_scale(Scales.get_scale!(scale_id))
+    {message, _} = Scales.delete_scale(Scales.get_scale!(scale_id))
 
     Helpers.get_return_value(
-      elem(return_value, 0),
+      message,
       %{errors: [field: "Something went wrong"]},
       socket,
       "Deleted",

@@ -5,8 +5,15 @@ defmodule ScaleGeneratorWeb.ErrorViewTest do
   import Phoenix.View
 
   test "renders 404.html", %{conn: conn} do
-    conn = Map.put(conn, :private, Map.put_new(conn.private, :phoenix_endpoint, ScaleGeneratorWeb.Endpoint))
-    assert render_to_string(ScaleGeneratorWeb.ErrorView, "404.html", conn: conn) =~ "Page Not Found"
+    conn =
+      Map.put(
+        conn,
+        :private,
+        Map.put_new(conn.private, :phoenix_endpoint, ScaleGeneratorWeb.Endpoint)
+      )
+
+    assert render_to_string(ScaleGeneratorWeb.ErrorView, "404.html", conn: conn) =~
+             "Page Not Found"
   end
 
   test "renders 500.html" do

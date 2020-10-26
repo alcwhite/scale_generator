@@ -14,7 +14,7 @@ defmodule ScaleGenerator.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: ScaleGenerator.PubSub},
       # Start the endpoint when the application starts
-      ScaleGeneratorWeb.Endpoint,
+      ScaleGeneratorWeb.Endpoint
       # Starts a worker by calling: ScaleGenerator.Worker.start_link(arg)
       # {ScaleGenerator.Worker, arg},
     ]
