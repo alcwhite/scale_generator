@@ -56,144 +56,122 @@ defmodule ScaleGeneratorLogicTest do
     end
   end
 
-  describe "generate flat chromatic scale" do
-    # @tag :pending
-    test "starting with A" do
-      assert ScaleGeneratorLogic.flat_chromatic_scale("A") == ~w(A Bb B C Db D Eb E F Gb G Ab A)
-    end
-
-    # @tag :pending
-    test "starting with C" do
-      assert ScaleGeneratorLogic.flat_chromatic_scale("C") == ~w(C Db D Eb E F Gb G Ab A Bb B C)
-    end
-
-    # @tag :pending
-    test "starting with G" do
-      assert ScaleGeneratorLogic.flat_chromatic_scale("G") == ~w(G Ab A Bb B C Db D Eb E F Gb G)
-    end
-
-    # @tag :pending
-    test "works with with lowercase notes" do
-      assert ScaleGeneratorLogic.flat_chromatic_scale("Gb") == ~w(Gb G Ab A Bb B C Db D Eb E F Gb)
-    end
-  end
-
   describe "find chromatic scale for flat tonics" do
     # @tag :pending
     test "using F" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("F") == ~w(F Gb G Ab A Bb B C Db D Eb E F)
+      assert ScaleGeneratorLogic.chromatic_scale("F") == ~w(F Gb G Ab A Bb B C Db D Eb E F)
     end
 
     # @tag :pending
     test "using Bb" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("Bb") == ~w(Bb B C Db D Eb E F Gb G Ab A Bb)
+      assert ScaleGeneratorLogic.chromatic_scale("Bb") == ~w(Bb B C Db D Eb E F Gb G Ab A Bb)
     end
 
     # @tag :pending
     test "using Eb" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("Eb") == ~w(Eb E F Gb G Ab A Bb B C Db D Eb)
+      assert ScaleGeneratorLogic.chromatic_scale("Eb") == ~w(Eb E F Gb G Ab A Bb B C Db D Eb)
     end
 
     # @tag :pending
     test "using Ab" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("Ab") == ~w(Ab A Bb B C Db D Eb E F Gb G Ab)
+      assert ScaleGeneratorLogic.chromatic_scale("Ab") == ~w(Ab A Bb B C Db D Eb E F Gb G Ab)
     end
 
     # @tag :pending
     test "using Db" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("Db") == ~w(Db D Eb E F Gb G Ab A Bb B C Db)
+      assert ScaleGeneratorLogic.chromatic_scale("Db") == ~w(Db D Eb E F Gb G Ab A Bb B C Db)
     end
 
     # @tag :pending
     test "using Gb" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("Gb") == ~w(Gb G Ab A Bb B C Db D Eb E F Gb)
+      assert ScaleGeneratorLogic.chromatic_scale("Gb") == ~w(Gb G Ab A Bb B C Db D Eb E F Gb)
     end
 
     # @tag :pending
     test "using d" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("d") == ~w(D Eb E F Gb G Ab A Bb B C Db D)
+      assert ScaleGeneratorLogic.chromatic_scale("d") == ~w(D Eb E F Gb G Ab A Bb B C Db D)
     end
 
     # @tag :pending
     test "using g" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("g") == ~w(G Ab A Bb B C Db D Eb E F Gb G)
+      assert ScaleGeneratorLogic.chromatic_scale("g") == ~w(G Ab A Bb B C Db D Eb E F Gb G)
     end
 
     # @tag :pending
     test "using c" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("c") == ~w(C Db D Eb E F Gb G Ab A Bb B C)
+      assert ScaleGeneratorLogic.chromatic_scale("c") == ~w(C Db D Eb E F Gb G Ab A Bb B C)
     end
 
     # @tag :pending
     test "using f" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("f") == ~w(F Gb G Ab A Bb B C Db D Eb E F)
+      assert ScaleGeneratorLogic.chromatic_scale("f") == ~w(F Gb G Ab A Bb B C Db D Eb E F)
     end
 
     # @tag :pending
     test "using bb" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("bb") == ~w(Bb B C Db D Eb E F Gb G Ab A Bb)
+      assert ScaleGeneratorLogic.chromatic_scale("bb") == ~w(Bb B C Db D Eb E F Gb G Ab A Bb)
     end
 
     # @tag :pending
     test "using eb" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("eb") == ~w(Eb E F Gb G Ab A Bb B C Db D Eb)
+      assert ScaleGeneratorLogic.chromatic_scale("eb") == ~w(Eb E F Gb G Ab A Bb B C Db D Eb)
     end
   end
 
   describe "find chromatic scale for non-flat tonics" do
     # @tag :pending
     test "using A" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("A") == ~w(A A# B C C# D D# E F F# G G# A)
+      assert ScaleGeneratorLogic.chromatic_scale("A") == ~w(A A# B C C# D D# E F F# G G# A)
     end
 
     # @tag :pending
     test "using A#" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("A#") == ~w(A# B C C# D D# E F F# G G# A A#)
+      assert ScaleGeneratorLogic.chromatic_scale("A#") == ~w(A# B C C# D D# E F F# G G# A A#)
     end
 
     # @tag :pending
     test "using B" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("B") == ~w(B C C# D D# E F F# G G# A A# B)
+      assert ScaleGeneratorLogic.chromatic_scale("B") == ~w(B C C# D D# E F F# G G# A A# B)
     end
 
     # @tag :pending
     test "using C" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("C") == ~w(C C# D D# E F F# G G# A A# B C)
+      assert ScaleGeneratorLogic.chromatic_scale("C") == ~w(C C# D D# E F F# G G# A A# B C)
     end
 
     # @tag :pending
     test "using C#" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("C#") == ~w(C# D D# E F F# G G# A A# B C C#)
+      assert ScaleGeneratorLogic.chromatic_scale("C#") == ~w(C# D D# E F F# G G# A A# B C C#)
     end
 
     # @tag :pending
     test "using D" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("D") == ~w(D D# E F F# G G# A A# B C C# D)
+      assert ScaleGeneratorLogic.chromatic_scale("D") == ~w(D D# E F F# G G# A A# B C C# D)
     end
 
     # @tag :pending
     test "using D#" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("D#") == ~w(D# E F F# G G# A A# B C C# D D#)
+      assert ScaleGeneratorLogic.chromatic_scale("D#") == ~w(D# E F F# G G# A A# B C C# D D#)
     end
 
     # @tag :pending
     test "using E" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("E") == ~w(E F F# G G# A A# B C C# D D# E)
+      assert ScaleGeneratorLogic.chromatic_scale("E") == ~w(E F F# G G# A A# B C C# D D# E)
     end
 
     # @tag :pending
     test "using F#" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("F#") == ~w(F# G G# A A# B C C# D D# E F F#)
+      assert ScaleGeneratorLogic.chromatic_scale("F#") == ~w(F# G G# A A# B C C# D D# E F F#)
     end
 
     # @tag :pending
     test "using G" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("G") == ~w(G G# A A# B C C# D D# E F F# G)
+      assert ScaleGeneratorLogic.chromatic_scale("G") == ~w(G G# A A# B C C# D D# E F F# G)
     end
 
     # @tag :pending
     test "using G#" do
-      assert ScaleGeneratorLogic.find_chromatic_scale("G#") == ~w(G# A A# B C C# D D# E F F# G G#)
+      assert ScaleGeneratorLogic.chromatic_scale("G#") == ~w(G# A A# B C C# D D# E F F# G G#)
     end
   end
 
