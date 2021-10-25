@@ -1,17 +1,19 @@
-<div class="phx-hero">
-    <%= for direction <- ["ascending", "descending"] do %>
-        <ScaleGeneratorWeb.ScaleComponent.render direction={direction} tonic={@tonic} scale={@scale} />
-    <% end %>
+<div data-controller="player select" data-action="select:select-scale->player#stop" data-player-playing-class="glow">
+    <div class="phx-hero">
+        <%= for direction <- ["ascending", "descending"] do %>
+            <ScaleGeneratorWeb.ScaleComponent.render direction={direction} tonic={@tonic} scale={@scale} />
+        <% end %>
 
-    <p class="lead"><%= scale_name(@tonic, @scale) %></p>
+        <p class="lead"><%= scale_name(@tonic, @scale) %></p>
 
-    <button data-action={@play_text} id="scale_player" phx-hook="PlayScale" data-recording={@recording}>
-        <%= @play_text %>
-    </button>
+        <button data-action="player#stop_or_start" data-player-target="button" id="scale_player" data-player-recording-param={@recording}>
+            <%= String.capitalize @play_text %>
+        </button>
+    </div>
+
+    <form phx-change="change" class="row center-wrapper" data-action="change->select#change">
+        <%= for [field, label, list, value] <- [[:tonic, "Tonic: ", @all_tonics, @tonic], [:name, "Scale name: ", @all_scales, @scale]] do %>
+            <ScaleGeneratorWeb.LabelledSelectComponent.render form={:scale_form} field={field} label={label} list={list} value={value} />
+        <% end %>
+    </form>
 </div>
-
-<form phx-change="change" class="row center-wrapper">
-    <%= for [field, label, list, value] <- [[:tonic, "Tonic: ", @all_tonics, @tonic], [:name, "Scale name: ", @all_scales, @scale]] do %>
-        <ScaleGeneratorWeb.LabelledSelectComponent.render form={:scale_form} field={field} label={label} list={list} value={value} />
-    <% end %>
-</form>
