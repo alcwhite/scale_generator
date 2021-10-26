@@ -10,8 +10,7 @@ defmodule ScaleGeneratorWeb.FormsLive do
      assign(socket, :all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))
      |> assign(:link, "/")
      |> assign(:link_name, "Main")
-     |> assign(:chosen_form, :create),
-     layout: {ScaleGeneratorWeb.LayoutView, "live.html"}}
+     |> assign(:chosen_form, :create), layout: {ScaleGeneratorWeb.LayoutView, "live.html"}}
   end
 
   def handle_info({_action, list}, socket) do
