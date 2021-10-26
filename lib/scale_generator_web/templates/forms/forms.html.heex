@@ -1,0 +1,14 @@
+<%= render ScaleGeneratorWeb.InstructionsView, "instructions.html" %>
+<section class="forms-group" id="forms-group">
+    <nav role="navigation">
+        <%= for [message, code] <- [["Add", :create], ["Correct", :update], ["Remove", :delete]] do %>
+            <ScaleGeneratorWeb.TabComponent.render chosen_form={@chosen_form} message={message} form_code={code} />
+        <% end %>
+    </nav>
+
+    <%= for form <- [:create, :update, :delete] do %>
+        <%= live_render @socket, ScaleGeneratorWeb.FormLive, [session: %{"all_scales" => @all_scales, "form" => form}, id: "#{form}-form"] %>
+    <% end %>
+    
+
+</section>

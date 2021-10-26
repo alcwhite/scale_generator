@@ -1,6 +1,7 @@
 defmodule ScaleGeneratorWeb.DeleteScaleForm do
   use Phoenix.HTML
-  use Phoenix.LiveView
+  use Phoenix.LiveView,
+    container: {:div, style: "display: none;"}
 
   alias ScaleGenerator.Scales
   alias Phoenix.PubSub

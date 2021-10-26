@@ -145,6 +145,19 @@ header nav a {
     color: white;
 }
 
+.fade-in {
+    animation: fade-in 5s;
+}
+
+@keyframes fade-in {
+    0% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
 .note {
     margin: 3px;
 }

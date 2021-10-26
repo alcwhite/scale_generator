@@ -2,7 +2,7 @@ defmodule ScaleGeneratorWeb.FlashComponent do
   use Phoenix.LiveComponent
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <%= if live_flash(@flash, :notice) != nil do %>
         <div class="alert ok-box" phx-click="lv:clear-flash"><span phx-click="lv:clear-flash" class="close">x</span>
             <li class="ok" phx-click="lv:clear-flash" phx-value-key="notice">

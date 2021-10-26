@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title><%= assigns[:page_title] || "ScaleGenerator · Phoenix LiveView" %></title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@socket, "/css/app.css") %>"/>
+    <link rel="stylesheet" href={Routes.static_path(@socket, "/css/app.css")} />
     <%= csrf_meta_tag() %>
   </head>
   <body>
@@ -13,10 +13,10 @@
       <header>
         <section class="container">
           <nav role="navigation">
-            <a href="<%= @link %>"><button><%= @link_name %></button></a>
+            <a href={@link}><button><%= @link_name %></button></a>
           </nav>
           <a href="https://phoenixframework.org/" class="phx-logo">
-            <img src="<%= Routes.static_path(@socket, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
+            <img src={Routes.static_path(@socket, "/images/phoenix.png")} alt="Phoenix Framework Logo"/>
           </a>
         </section>
       </header>
@@ -35,6 +35,6 @@
       </nav>
     </footer>
     <%= csrf_meta_tag() %>
-    <script type="text/javascript" src="<%= Routes.static_path(@socket, "/js/app.js") %>"></script>
+    <script type="text/javascript" src={Routes.static_path(@socket, "/js/app.js")}></script>
   </body>
 </html>

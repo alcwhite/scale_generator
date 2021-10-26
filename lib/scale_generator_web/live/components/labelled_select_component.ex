@@ -3,7 +3,7 @@ defmodule ScaleGeneratorWeb.LabelledSelectComponent do
   use Phoenix.HTML
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <section class="column center">
         <%= label @form, @field, @label %>
         <%= select @form, @field, @list, value: @value %>
