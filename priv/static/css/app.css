@@ -1,3 +1,6 @@
+/*!*******************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./css/phoenix.css ***!
+  \*******************************************************************/
 /* Includes some default style for the starter application.
  * This can be safely deleted to start fresh.
  */
@@ -133,6 +136,9 @@ header nav a {
   }
 }
 
+/*!***************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./css/app.css ***!
+  \***************************************************************/
 /* This file is for your main application css. */
 
 .glow {
