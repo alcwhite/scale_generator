@@ -47,7 +47,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       {:ok, view, _html} = live(conn, "/forms")
       assert 0 == Enum.count(Scales.list_scales())
 
-      find_live_child(view, "create")
+      find_live_child(view, "create-form")
       |> form("form",
         create_scale_form: %{
           "name" => "whatever",
@@ -71,7 +71,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       element(view, "button", "Correct")
       |> render_click
 
-      find_live_child(view, "update")
+      find_live_child(view, "update-form")
       |> form("form",
         update_scale_form: %{
           "name" => "whatever",
@@ -92,10 +92,10 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
 
       {:ok, view, _html} = live(conn, "/forms")
 
-      element(view, "button", "Remove")
+      element(view, "button", "Remove a Scale")
       |> render_click
 
-      find_live_child(view, "destroy")
+      find_live_child(view, "delete-form")
       |> form("form", delete_scale_form: %{"name" => "whatever"})
       |> render_submit()
 
@@ -110,10 +110,10 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       {:ok, delete_view, _html} = live(conn, "/forms")
       {:ok, update_view, _html} = live(conn, "/forms")
 
-      element(delete_view, "button", "Remove")
+      element(delete_view, "button", "Remove a Scale")
       |> render_click
 
-      element(update_view, "button", "Correct")
+      element(update_view, "button", "Correct a Scale")
       |> render_click
 
       assert 0 == Enum.count(Scales.list_scales())
@@ -121,7 +121,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       refute has_element?(delete_view, "option")
       refute has_element?(update_view, "option")
 
-      find_live_child(view, "create")
+      find_live_child(view, "create-form")
       |> form("form",
         create_scale_form: %{
           "name" => "whatever",
@@ -146,16 +146,16 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       {:ok, main_view, _html} = live(conn, "/")
       {:ok, update_view, _html} = live(conn, "/forms")
 
-      element(update_view, "button", "Correct")
+      element(update_view, "button", "Correct a Scale")
       |> render_click
 
       assert has_element?(main_view, "#scale_form_name option")
       assert has_element?(update_view, "option")
 
-      element(view, "button", "Remove")
+      element(view, "button", "Remove a Scale")
       |> render_click
 
-      find_live_child(view, "destroy")
+      find_live_child(view, "delete-form")
       |> form("form", delete_scale_form: %{"name" => "whatever"})
       |> render_submit()
 
