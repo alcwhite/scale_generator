@@ -7,9 +7,9 @@ defmodule ScaleGeneratorWeb.ScaleComponent do
     ~H"""
     <p class="lead"><%= @direction %></p>
     <h2>
-        <%= Enum.map(Enum.with_index(ScaleGeneratorWeb.MainView.scale(@tonic, @scale, Map.get(directions, @direction))), fn {note, i} -> %>
-            <span id={ "#{i}-#{to_string(Map.get(directions, @direction))}" } class="note"><%= note %></span>
-        <% end) %>
+      <%= Enum.with_index(ScaleGeneratorWeb.MainView.scale(@tonic, @scale, Map.get(directions, @direction))) |> Enum.map(fn {note, i} -> %>
+        <scale-note index={i} direction={Map.get(directions, @direction)} note={note} playing={false}></scale-note>
+      <% end) %>
     </h2>
     """
   end

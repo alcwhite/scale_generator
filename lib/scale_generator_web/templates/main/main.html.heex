@@ -1,16 +1,14 @@
 <div class="phx-hero">
     <%= for direction <- ["ascending", "descending"] do %>
-        <ScaleGeneratorWeb.ScaleComponent.render direction={direction} tonic={@tonic} scale={@scale} />
+        <ScaleGeneratorWeb.ScaleComponent.render direction={direction} tonic={@tonic} scale={@scale} recording={@recording} />
     <% end %>
 
     <p class="lead"><%= scale_name(@tonic, @scale) %></p>
 
-    <button data-action={@play_text} id="scale_player" phx-hook="PlayScale" data-recording={@recording}>
-        <%= @play_text %>
-    </button>
+    <scale-player id="scale-player" playing={false} recording={@recording}></scale-player>
 </div>
 
-<form phx-change="change" class="row center-wrapper">
+<form phx-change={ JS.dispatch("change-scale", to: "#scale-player") |> JS.push("change") } class="row center-wrapper">
     <%= for [field, label, list, value] <- [[:tonic, "Tonic: ", @all_tonics, @tonic], [:name, "Scale name: ", @all_scales, @scale]] do %>
         <ScaleGeneratorWeb.LabelledSelectComponent.render form={:scale_form} field={field} label={label} list={list} value={value} />
     <% end %>
