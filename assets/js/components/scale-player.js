@@ -39,6 +39,7 @@ export class ScalePlayer extends LitElement {
   constructor() {
     super()
     this.addEventListener("change-scale", this._stop)
+    this.timeouts = []
   }
 
   _playOrStop(_event) {
@@ -47,27 +48,23 @@ export class ScalePlayer extends LitElement {
 
   _play() {
     this.playing = true
-    const halfLength = this.notes.length / 2
     this.timeouts = this.notes.map((note, i) => setTimeout(() => {
-      const direction = i < halfLength ? "asc" : "desc"
-      const index = i < halfLength ? i : i - halfLength
-      const playEvent = new CustomEvent("playing-note", {
-        detail: {index, direction}
+      Array.from(document.querySelectorAll("scale-note")).forEach((item, index) => {
+        const el = item.renderRoot.querySelector(".note")
+        i === index ? el.classList.add("glow") : el.classList.remove("glow")
       })
-      Array.from(document.querySelectorAll("scale-note")).forEach(item => item.dispatchEvent(playEvent))
-      this.dispatchEvent(playEvent)
       new Audio(`/sounds/${note}.mp3`).play()
     }, 750 * i))
-    setTimeout(() => {
+    this.stopTimeout = setTimeout(() => {
       this._stop()
     }, 750 * this.notes.length)
   }
 
   _stop() {
     this.timeouts.map(t => clearTimeout(t))
-    const stopEvent = new CustomEvent("stopping-player", {})
-    Array.from(document.querySelectorAll("scale-note")).forEach(item => item.dispatchEvent(stopEvent))
-    this.timeouts = []
+    Array.from(document.querySelectorAll("scale-note"))
+      .forEach(item => item.renderRoot.querySelector(".note").classList.remove("glow"))
+    clearTimeout(this.stopTimeout)
     this.playing = false
   }
 

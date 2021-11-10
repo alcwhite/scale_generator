@@ -15,33 +15,30 @@ export class ScaleNote extends LitElement {
       }
       .note {
         margin: 3px;
+        cursor: pointer;
       }
     `
     ];
   }
 
   static properties = {
-    index: { type: Number },
     playing: { type: Boolean },
     note: { type: String },
-    direction: { type: String }
+    recording: {type: String},
   }
 
   get classes() { return this.playing ? "note glow" : "note" }
 
-  constructor() {
-    super()
-    this.addEventListener("playing-note", this._playingNote)
-    this.addEventListener("stopping-player", () => this.playing = false)
-  }
-
-  _playingNote(event) {
-    const {detail: {direction, index}} = event
-    this.playing = index === event.target.index && direction === event.target.direction ? true : false
+  _playNote() {
+    this.playing = true
+    new Audio(`/sounds/${this.recording}.mp3`).play()
+    setTimeout(() => {
+      this.playing = false
+    }, 750)
   }
  
   render() {
-    return html`<span class="${this.classes}">${this.note}</span>`
+    return html`<span @click="${this._playNote}" class="${this.classes}">${this.note}</span>`
   }
 }
 
