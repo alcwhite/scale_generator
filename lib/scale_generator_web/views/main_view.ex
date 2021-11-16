@@ -4,6 +4,7 @@ defmodule ScaleGeneratorWeb.MainView do
   alias ScaleGenerator.Scales
   alias ScaleGenerator.ScaleGeneratorLogic
   alias ScaleGenerator.ScaleRecorder
+  alias Phoenix.LiveView.JS
 
   def scale(tonic, name, direction \\ :asc) do
     found_scale = Enum.find(Scales.list_scales(), fn s -> s.name == name end)
