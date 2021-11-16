@@ -4,12 +4,6 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
   @endpoint ScaleGeneratorWeb.Endpoint
   alias ScaleGenerator.Scales
 
-  defp create_spans(string, dir) do
-    Enum.map(Enum.with_index(String.split(string, " ")), fn {note, i} ->
-      "<span id=\"#{i}-#{dir}\" class=\"note\">#{note}</span>"
-    end)
-  end
-
   describe "forms" do
     test "GET /", %{conn: conn} do
       conn = get(conn, "/")
@@ -26,7 +20,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       {:ok, view, _html} = live(conn, "/")
       Scales.create_scale(%{name: "major", asc_pattern: "MMmMMMm", desc_pattern: "mMMMmMM"})
 
-      Enum.each(create_spans("D D# E F F# G G# A A# B C C# D", "asc"), fn span ->
+      Enum.each(create_spans("D D# E F F# G G# A A# B C2 C#2 D2", "asc"), fn span ->
         assert render_change(view, :change, %{
                  "scale_form" => %{"tonic" => "D", "name" => "chromatic"}
                }) =~ span
@@ -35,7 +29,7 @@ defmodule ScaleGeneratorWeb.FormsLiveTest do
       assert render_change(view, :change, %{"scale_form" => %{"tonic" => "D#", "name" => "major"}}) =~
                "D# major"
 
-      Enum.each(create_spans("E F# G# A B C# D# E", "asc"), fn span ->
+      Enum.each(create_spans("E F# G# A B C#2 D#2 E2", "asc"), fn span ->
         assert render_change(view, :change, %{
                  "scale_form" => %{"tonic" => "E", "name" => "major"}
                }) =~

@@ -8,7 +8,10 @@ defmodule ScaleGeneratorWeb.ScaleComponent do
   defp recording_note(i, recording_string, direction) do
     recording = recording_string |> String.split(" ")
     desc_i = (recording |> Enum.count() |> div(2)) + i
-    if direction_atom(direction) == :desc, do: Enum.at(recording, desc_i), else: Enum.at(recording, i)
+
+    if direction_atom(direction) == :desc,
+      do: Enum.at(recording, desc_i),
+      else: Enum.at(recording, i)
   end
 
   def render(assigns) do
