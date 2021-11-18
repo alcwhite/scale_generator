@@ -1,2 +1,2 @@
 web: MIX_ENV=prod mix phx.server
-release: mix ecto.migrate && cd assets && npm i && cd ..
+release: mix ecto.migrate
