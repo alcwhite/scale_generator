@@ -2,7 +2,7 @@
   "repository": {},
   "license": "MIT",
   "scripts": {
-    "deploy": "webpack --mode production",
+    "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild",
     "watch": "webpack --mode development --watch --watch-options-stdin"
   },
   "dependencies": {
