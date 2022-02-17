@@ -5,13 +5,21 @@ defmodule ScaleGeneratorWeb.MainLive do
   alias ScaleGenerator.Scales
   alias Phoenix.PubSub
   alias ScaleGenerator.Helpers
+  alias ScaleGenerator.ScaleGeneratorLogic
+  alias ScaleGenerator.ScaleRecorder
+
+  import ScaleGeneratorWeb.{FormsComponent, ScaleComponent}
+
+  def scale_name(tonic, name) do
+    "#{tonic} #{name}"
+  end
 
   @defaults %{tonic: "C", name: "chromatic"}
   @all_tonics ~w(C C# Db D D# Eb E F F# Gb G G# Ab A A# Bb B)
 
   def mount(_params, _session, socket) do
-    PubSub.subscribe(ScaleGenerator.PubSub, "update_scales")
-
+    if connected?(socket), do: PubSub.subscribe(ScaleGenerator.PubSub, "update_scales")
+    if connected?(socket), do: IO.inspect("HELLO")
     {:ok,
      assign(socket, %{
        tonic: @defaults.tonic,
@@ -40,9 +48,5 @@ defmodule ScaleGeneratorWeb.MainLive do
 
   def handle_info({_action, list}, socket) do
     {:noreply, assign(socket, :all_scales, list)}
-  end
-
-  def render(assigns) do
-    ScaleGeneratorWeb.MainView.render("main.html", assigns)
   end
 end

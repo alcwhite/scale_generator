@@ -1,7 +1,7 @@
 defmodule ScaleGenerator.Helpers do
   alias Phoenix.LiveView
   alias Phoenix.PubSub
-  alias ScaleGenerator.ScaleRecorder
+  alias ScaleGenerator.{Scales, ScaleGeneratorLogic, ScaleRecorder}
 
   @tonic_list %{
     "C" => "261.54",
@@ -75,5 +75,11 @@ defmodule ScaleGenerator.Helpers do
         ScaleRecorder.record_scale(name, frequency, :desc),
       " "
     )
+  end
+
+  def scale(tonic, name, direction \\ :asc) do
+    found_scale = Enum.find(Scales.list_scales(), fn s -> s.name == name end)
+    pattern = ScaleRecorder.get_pattern(found_scale, direction)
+    ScaleGeneratorLogic.scale(tonic, pattern, direction)
   end
 end

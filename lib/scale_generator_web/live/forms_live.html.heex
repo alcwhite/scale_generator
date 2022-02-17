@@ -1,8 +1,8 @@
-<%= render ScaleGeneratorWeb.InstructionsView, "instructions.html" %>
+<.instructions />
 <section class="forms-group" id="forms-group">
     <nav role="navigation">
-        <%= for [message, code] <- [["Add a Scale", :create], ["Correct a Scale", :update], ["Remove a Scale", :delete]] do %>
-            <ScaleGeneratorWeb.TabComponent.render chosen_form={@chosen_form} message={message} form_code={code} />
+        <%= for {code, message} <- %{create: "Add a Scale", update: "Correct a Scale", delete: "Remove a Scale"} do %>
+            <.tab chosen_form={@chosen_form} message={message} form_code={code} />
         <% end %>
     </nav>
 
