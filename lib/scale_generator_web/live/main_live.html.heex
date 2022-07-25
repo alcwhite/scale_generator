@@ -6,8 +6,8 @@
 
     <p class="lead"><%= scale_name(@tonic, @scale) %></p>
 
-    <button data-action={@play_text} id="scale_player" phx-hook="PlayScale" data-recording={@recording}>
-        <%= @play_text %>
+    <button phx-click="clickplayer" data-action={@player_text} id="scale_player" phx-update="ignore" phx-hook="PlayScale" data-recording={@recording}>
+        <%= @player_text %>
     </button>
 </div>
 
