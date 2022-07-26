@@ -7,7 +7,7 @@ defmodule ScaleGenerator.MixProject do
       version: "0.1.1",
       elixir: "<= 1.12.3",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -36,7 +36,7 @@ defmodule ScaleGenerator.MixProject do
       {:phoenix, "~> 1.6.11"},
       {:phoenix_pubsub, "~> 2.1.1"},
       {:phoenix_ecto, "~> 4.0"},
-      {:ecto_sql, "~> 3.1"},
+      {:ecto_sql, "~> 3.8.3"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.2.0"},
@@ -44,8 +44,8 @@ defmodule ScaleGenerator.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.3.0"},
       {:plug_cowboy, "~> 2.4.0"},
-      {:phoenix_live_view, "~> 0.17.2"},
-      {:floki, ">= 0.0.0", only: :test},
+      {:phoenix_live_view, "~> 0.17.11"},
+      {:floki, ">= 0.33.1", only: :test},
       {:phoenix_live_dashboard, "~> 0.5"},
       {:telemetry_poller, "~> 0.4"},
       {:telemetry_metrics, "~> 0.4"}
