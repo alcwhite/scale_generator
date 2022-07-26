@@ -7,7 +7,7 @@ defmodule ScaleGenerator.MixProject do
       version: "0.1.1",
       elixir: "<= 1.12.3",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -43,12 +43,12 @@ defmodule ScaleGenerator.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.3.0"},
-      {:plug_cowboy, "~> 2.4.0"},
+      {:plug_cowboy, "~> 2.5"},
       {:phoenix_live_view, "~> 0.17.11"},
       {:floki, ">= 0.33.1", only: :test},
       {:phoenix_live_dashboard, "~> 0.5"},
-      {:telemetry_poller, "~> 0.4"},
-      {:telemetry_metrics, "~> 0.4"}
+      {:telemetry_poller, "~> 1.0"},
+      {:telemetry_metrics, "~> 0.6"}
     ]
   end
 
@@ -60,9 +60,11 @@ defmodule ScaleGenerator.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end
 end
