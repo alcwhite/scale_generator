@@ -1,7 +1,20 @@
-defmodule ScaleGeneratorWeb.FlashComponent do
-  use Phoenix.LiveComponent
+defmodule ScaleGeneratorWeb.InfoComponent do
+  use Phoenix.Component
 
-  def render(assigns) do
+  def instructions(assigns) do
+    ~H"""
+    <article class="row center-wrapper">
+        <section class="column center">
+            <p>Scale patterns must contain exactly 12 half-steps.</p>
+        </section>
+        <section class="column center">
+            <p>m = 1 half-step, M = 2 half-steps, A = 3 half-steps</p>
+        </section>
+    </article>
+    """
+  end
+
+  def flash(assigns) do
     ~H"""
     <%= if live_flash(@flash, :notice) != nil do %>
         <div class="alert ok-box" phx-click="lv:clear-flash"><span phx-click="lv:clear-flash" class="close">x</span>

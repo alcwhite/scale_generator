@@ -4,6 +4,8 @@ defmodule ScaleGeneratorWeb.FormsLive do
 
   alias ScaleGenerator.Scales
 
+  import ScaleGeneratorWeb.{ScaleFormComponent, InfoComponent}
+
   def mount(_params, _session, socket) do
     {:ok,
      assign(socket, :all_scales, Enum.map(Scales.list_scales(), fn s -> s.name end))
@@ -18,9 +20,5 @@ defmodule ScaleGeneratorWeb.FormsLive do
 
   def handle_event("select_form", %{"form" => form}, socket) do
     {:noreply, assign(socket, :chosen_form, String.to_existing_atom(form))}
-  end
-
-  def render(assigns) do
-    ScaleGeneratorWeb.FormsView.render("forms.html", assigns)
   end
 end

@@ -5,7 +5,7 @@ defmodule ScaleGenerator.MixProject do
     [
       app: :scale_generator,
       version: "0.1.1",
-      elixir: "<= 1.12.3",
+      elixir: "<= 1.13.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,

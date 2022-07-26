@@ -143,15 +143,10 @@ defmodule ScaleGeneratorWeb.FormLive do
     {:noreply, assign(socket, :all_scales, list)}
   end
 
-  def render(%{form: :create} = assigns) do
-    ScaleGeneratorWeb.CreateScaleFormView.render("create_scale.html", assigns)
-  end
-
-  def render(%{form: :delete} = assigns) do
-    ScaleGeneratorWeb.DeleteScaleFormView.render("delete_scale.html", assigns)
-  end
-
-  def render(%{form: :update} = assigns) do
-    ScaleGeneratorWeb.UpdateScaleFormView.render("update_scale.html", assigns)
+  def render(assigns) do
+    default_form = %{form: :create, name: "chromatic", name: "C"}
+    ~H"""
+    <ScaleGeneratorWeb.ScaleFormComponent.scale_form {Map.merge(default_form, assigns)} />
+    """
   end
 end
