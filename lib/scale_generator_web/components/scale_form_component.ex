@@ -2,7 +2,6 @@ defmodule ScaleGeneratorWeb.ScaleFormComponent do
   use Phoenix.Component
   use Phoenix.HTML
 
-  alias ScaleGenerator.Helpers
   alias Phoenix.LiveView.JS
 
   import ScaleGeneratorWeb.{InfoComponent, FormsComponent}

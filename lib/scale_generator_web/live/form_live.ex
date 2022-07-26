@@ -144,7 +144,7 @@ defmodule ScaleGeneratorWeb.FormLive do
   end
 
   def render(assigns) do
-    default_form = %{form: :create, name: "chromatic", name: "C"}
+    default_form = %{form: :create, name: "chromatic"}
     ~H"""
     <ScaleGeneratorWeb.ScaleFormComponent.scale_form {Map.merge(default_form, assigns)} />
     """
